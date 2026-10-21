@@ -1,0 +1,2157 @@
+{
+ "protocol": "wotr-bot/0.1",
+ "rules": "base-2e",
+ "sides": [
+  "FREE_PEOPLES",
+  "SHADOW"
+ ],
+ "nations": [
+  {
+   "key": "DWARVES",
+   "name": "Dwarves",
+   "side": "FREE_PEOPLES"
+  },
+  {
+   "key": "ELVES",
+   "name": "Elves",
+   "side": "FREE_PEOPLES"
+  },
+  {
+   "key": "GONDOR",
+   "name": "Gondor",
+   "side": "FREE_PEOPLES"
+  },
+  {
+   "key": "NORTH",
+   "name": "The North",
+   "side": "FREE_PEOPLES"
+  },
+  {
+   "key": "ROHAN",
+   "name": "Rohan",
+   "side": "FREE_PEOPLES"
+  },
+  {
+   "key": "ISENGARD",
+   "name": "Isengard",
+   "side": "SHADOW"
+  },
+  {
+   "key": "SAURON",
+   "name": "Sauron",
+   "side": "SHADOW"
+  },
+  {
+   "key": "SOUTHRONS_EASTERLINGS",
+   "name": "Southrons & Easterlings",
+   "side": "SHADOW"
+  }
+ ],
+ "regions": [
+  {
+   "key": "forlindon",
+   "name": "Forlindon",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "grey-havens"
+   ]
+  },
+  {
+   "key": "ered-luin",
+   "name": "Ered Luin",
+   "nation": "DWARVES",
+   "settlement": "TOWN",
+   "neighbours": [
+    "north-ered-luin",
+    "grey-havens",
+    "tower-hills",
+    "evendim"
+   ]
+  },
+  {
+   "key": "north-ered-luin",
+   "name": "North Ered Luin",
+   "nation": "DWARVES",
+   "settlement": null,
+   "neighbours": [
+    "evendim",
+    "ered-luin"
+   ]
+  },
+  {
+   "key": "evendim",
+   "name": "Evendim",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "ered-luin",
+    "north-ered-luin",
+    "tower-hills",
+    "arnor",
+    "north-downs",
+    "buckland",
+    "the-shire"
+   ]
+  },
+  {
+   "key": "harlindon",
+   "name": "Harlindon",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "grey-havens",
+    "south-ered-luin"
+   ]
+  },
+  {
+   "key": "grey-havens",
+   "name": "Grey Havens",
+   "nation": "ELVES",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "harlindon",
+    "forlindon",
+    "ered-luin",
+    "tower-hills"
+   ]
+  },
+  {
+   "key": "tower-hills",
+   "name": "Tower Hills",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "grey-havens",
+    "ered-luin",
+    "evendim",
+    "the-shire",
+    "south-ered-luin"
+   ]
+  },
+  {
+   "key": "south-ered-luin",
+   "name": "South Ered Luin",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "tower-hills",
+    "the-shire",
+    "harlindon",
+    "old-forest",
+    "cardolan",
+    "minhiriath"
+   ]
+  },
+  {
+   "key": "the-shire",
+   "name": "The Shire",
+   "nation": "NORTH",
+   "settlement": "CITY",
+   "neighbours": [
+    "tower-hills",
+    "evendim",
+    "buckland",
+    "old-forest",
+    "south-ered-luin"
+   ]
+  },
+  {
+   "key": "arnor",
+   "name": "Arnor",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "evendim",
+    "north-downs",
+    "ettenmoors",
+    "angmar"
+   ]
+  },
+  {
+   "key": "north-downs",
+   "name": "North Downs",
+   "nation": "NORTH",
+   "settlement": null,
+   "neighbours": [
+    "evendim",
+    "arnor",
+    "ettenmoors",
+    "weather-hills",
+    "bree",
+    "buckland"
+   ]
+  },
+  {
+   "key": "buckland",
+   "name": "Buckland",
+   "nation": "NORTH",
+   "settlement": null,
+   "neighbours": [
+    "the-shire",
+    "old-forest",
+    "cardolan",
+    "south-downs",
+    "bree",
+    "north-downs",
+    "evendim"
+   ]
+  },
+  {
+   "key": "bree",
+   "name": "Bree",
+   "nation": "NORTH",
+   "settlement": "TOWN",
+   "neighbours": [
+    "north-downs",
+    "buckland",
+    "south-downs",
+    "weather-hills"
+   ]
+  },
+  {
+   "key": "ettenmoors",
+   "name": "Ettenmoors",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "arnor",
+    "north-downs",
+    "weather-hills",
+    "trollshaws",
+    "mount-gram",
+    "angmar"
+   ]
+  },
+  {
+   "key": "weather-hills",
+   "name": "Weather Hills",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "bree",
+    "south-downs",
+    "trollshaws",
+    "ettenmoors",
+    "north-downs"
+   ]
+  },
+  {
+   "key": "south-downs",
+   "name": "South Downs",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "buckland",
+    "bree",
+    "weather-hills",
+    "trollshaws",
+    "hollin",
+    "north-dunland",
+    "cardolan"
+   ]
+  },
+  {
+   "key": "cardolan",
+   "name": "Cardolan",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "old-forest",
+    "buckland",
+    "south-downs",
+    "north-dunland",
+    "tharbad",
+    "minhiriath",
+    "south-ered-luin"
+   ]
+  },
+  {
+   "key": "old-forest",
+   "name": "Old Forest",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "the-shire",
+    "buckland",
+    "cardolan",
+    "south-ered-luin"
+   ]
+  },
+  {
+   "key": "minhiriath",
+   "name": "Minhiriath",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "south-ered-luin",
+    "cardolan",
+    "tharbad",
+    "enedwaith"
+   ]
+  },
+  {
+   "key": "tharbad",
+   "name": "Tharbad",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "minhiriath",
+    "cardolan",
+    "north-dunland",
+    "south-dunland",
+    "enedwaith"
+   ]
+  },
+  {
+   "key": "enedwaith",
+   "name": "Enedwaith",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "minhiriath",
+    "tharbad",
+    "south-dunland",
+    "gap-of-rohan",
+    "druwaith-iaur"
+   ]
+  },
+  {
+   "key": "north-dunland",
+   "name": "North Dunland",
+   "nation": "ISENGARD",
+   "settlement": "TOWN",
+   "neighbours": [
+    "tharbad",
+    "cardolan",
+    "south-downs",
+    "hollin",
+    "moria",
+    "south-dunland"
+   ]
+  },
+  {
+   "key": "south-dunland",
+   "name": "South Dunland",
+   "nation": "ISENGARD",
+   "settlement": "TOWN",
+   "neighbours": [
+    "tharbad",
+    "north-dunland",
+    "gap-of-rohan",
+    "enedwaith"
+   ]
+  },
+  {
+   "key": "gap-of-rohan",
+   "name": "Gap of Rohan",
+   "nation": "ISENGARD",
+   "settlement": null,
+   "neighbours": [
+    "enedwaith",
+    "south-dunland",
+    "orthanc",
+    "druwaith-iaur",
+    "fords-of-isen"
+   ]
+  },
+  {
+   "key": "orthanc",
+   "name": "Orthanc",
+   "nation": "ISENGARD",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "gap-of-rohan",
+    "fords-of-isen"
+   ]
+  },
+  {
+   "key": "druwaith-iaur",
+   "name": "Drúwaith Iaur",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "enedwaith",
+    "gap-of-rohan",
+    "fords-of-isen",
+    "andrast"
+   ]
+  },
+  {
+   "key": "andrast",
+   "name": "Andrast",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "druwaith-iaur",
+    "anfalas"
+   ]
+  },
+  {
+   "key": "trollshaws",
+   "name": "Trollshaws",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "ettenmoors",
+    "rivendell",
+    "fords-of-bruinen",
+    "hollin",
+    "south-downs",
+    "weather-hills"
+   ]
+  },
+  {
+   "key": "hollin",
+   "name": "Hollin",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "south-downs",
+    "trollshaws",
+    "fords-of-bruinen",
+    "moria",
+    "north-dunland"
+   ]
+  },
+  {
+   "key": "fords-of-bruinen",
+   "name": "Fords of Bruinen",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "trollshaws",
+    "rivendell",
+    "high-pass",
+    "hollin"
+   ]
+  },
+  {
+   "key": "high-pass",
+   "name": "High Pass",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "fords-of-bruinen",
+    "goblins-gate"
+   ]
+  },
+  {
+   "key": "goblins-gate",
+   "name": "Goblin's Gate",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "high-pass",
+    "old-ford"
+   ]
+  },
+  {
+   "key": "old-ford",
+   "name": "Old Ford",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "goblins-gate",
+    "eagles-eyrie",
+    "carrock",
+    "rhosgobel",
+    "gladden-fields"
+   ]
+  },
+  {
+   "key": "gladden-fields",
+   "name": "Gladden Fields",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "old-ford",
+    "rhosgobel",
+    "north-anduin-vale",
+    "dimrill-dale"
+   ]
+  },
+  {
+   "key": "dimrill-dale",
+   "name": "Dimrill Dale",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "gladden-fields",
+    "north-anduin-vale",
+    "south-anduin-vale",
+    "parth-celebrant",
+    "lorien",
+    "moria"
+   ]
+  },
+  {
+   "key": "eagles-eyrie",
+   "name": "Eagle's Eyrie",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "mount-gundabad",
+    "carrock",
+    "old-ford"
+   ]
+  },
+  {
+   "key": "angmar",
+   "name": "Angmar",
+   "nation": "SAURON",
+   "settlement": "CITY",
+   "neighbours": [
+    "arnor",
+    "ettenmoors",
+    "mount-gram"
+   ]
+  },
+  {
+   "key": "mount-gram",
+   "name": "Mount Gram",
+   "nation": "SAURON",
+   "settlement": null,
+   "neighbours": [
+    "angmar",
+    "ettenmoors",
+    "mount-gundabad"
+   ]
+  },
+  {
+   "key": "mount-gundabad",
+   "name": "Mount Gundabad",
+   "nation": "SAURON",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "mount-gram",
+    "eagles-eyrie"
+   ]
+  },
+  {
+   "key": "lorien",
+   "name": "Lórien",
+   "nation": "ELVES",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "dimrill-dale",
+    "parth-celebrant"
+   ]
+  },
+  {
+   "key": "rivendell",
+   "name": "Rivendell",
+   "nation": "ELVES",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "trollshaws",
+    "fords-of-bruinen"
+   ]
+  },
+  {
+   "key": "moria",
+   "name": "Moria",
+   "nation": "SAURON",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "hollin",
+    "dimrill-dale",
+    "north-dunland"
+   ]
+  },
+  {
+   "key": "parth-celebrant",
+   "name": "Parth Celebrant",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "lorien",
+    "dimrill-dale",
+    "south-anduin-vale",
+    "western-brown-lands",
+    "eastemnet",
+    "fangorn"
+   ]
+  },
+  {
+   "key": "fangorn",
+   "name": "Fangorn",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "parth-celebrant",
+    "eastemnet",
+    "westemnet",
+    "fords-of-isen"
+   ]
+  },
+  {
+   "key": "eastemnet",
+   "name": "Eastemnet",
+   "nation": "ROHAN",
+   "settlement": null,
+   "neighbours": [
+    "parth-celebrant",
+    "fangorn",
+    "western-brown-lands",
+    "western-emyn-muil",
+    "druadan-forest",
+    "folde",
+    "westemnet"
+   ]
+  },
+  {
+   "key": "westemnet",
+   "name": "Westemnet",
+   "nation": "ROHAN",
+   "settlement": "TOWN",
+   "neighbours": [
+    "fangorn",
+    "eastemnet",
+    "folde",
+    "edoras",
+    "helms-deep",
+    "fords-of-isen"
+   ]
+  },
+  {
+   "key": "folde",
+   "name": "Folde",
+   "nation": "ROHAN",
+   "settlement": "TOWN",
+   "neighbours": [
+    "westemnet",
+    "eastemnet",
+    "druadan-forest",
+    "edoras"
+   ]
+  },
+  {
+   "key": "edoras",
+   "name": "Edoras",
+   "nation": "ROHAN",
+   "settlement": "CITY",
+   "neighbours": [
+    "folde",
+    "westemnet"
+   ]
+  },
+  {
+   "key": "helms-deep",
+   "name": "Helm's Deep",
+   "nation": "ROHAN",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "fords-of-isen",
+    "westemnet"
+   ]
+  },
+  {
+   "key": "fords-of-isen",
+   "name": "Fords of Isen",
+   "nation": "ROHAN",
+   "settlement": null,
+   "neighbours": [
+    "helms-deep",
+    "fangorn",
+    "westemnet",
+    "orthanc",
+    "gap-of-rohan",
+    "druwaith-iaur"
+   ]
+  },
+  {
+   "key": "anfalas",
+   "name": "Anfalas",
+   "nation": "GONDOR",
+   "settlement": null,
+   "neighbours": [
+    "andrast",
+    "erech",
+    "dol-amroth"
+   ]
+  },
+  {
+   "key": "erech",
+   "name": "Erech",
+   "nation": "GONDOR",
+   "settlement": null,
+   "neighbours": [
+    "anfalas",
+    "lamedon",
+    "dol-amroth"
+   ]
+  },
+  {
+   "key": "lamedon",
+   "name": "Lamedon",
+   "nation": "GONDOR",
+   "settlement": "TOWN",
+   "neighbours": [
+    "erech",
+    "pelargir",
+    "dol-amroth"
+   ]
+  },
+  {
+   "key": "dol-amroth",
+   "name": "Dol Amroth",
+   "nation": "GONDOR",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "anfalas",
+    "erech",
+    "lamedon"
+   ]
+  },
+  {
+   "key": "pelargir",
+   "name": "Pelargir",
+   "nation": "GONDOR",
+   "settlement": "CITY",
+   "neighbours": [
+    "lamedon",
+    "lossarnach",
+    "osgiliath",
+    "west-harondor"
+   ]
+  },
+  {
+   "key": "lossarnach",
+   "name": "Lossarnach",
+   "nation": "GONDOR",
+   "settlement": "TOWN",
+   "neighbours": [
+    "minas-tirith",
+    "osgiliath",
+    "pelargir"
+   ]
+  },
+  {
+   "key": "minas-tirith",
+   "name": "Minas Tirith",
+   "nation": "GONDOR",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "lossarnach",
+    "druadan-forest",
+    "osgiliath"
+   ]
+  },
+  {
+   "key": "druadan-forest",
+   "name": "Drúadan Forest",
+   "nation": "GONDOR",
+   "settlement": null,
+   "neighbours": [
+    "folde",
+    "eastemnet",
+    "western-emyn-muil",
+    "dead-marshes",
+    "osgiliath",
+    "minas-tirith"
+   ]
+  },
+  {
+   "key": "osgiliath",
+   "name": "Osgiliath",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "pelargir",
+    "lossarnach",
+    "minas-tirith",
+    "druadan-forest",
+    "dead-marshes",
+    "north-ithilien",
+    "south-ithilien",
+    "west-harondor"
+   ]
+  },
+  {
+   "key": "dead-marshes",
+   "name": "Dead Marshes",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "druadan-forest",
+    "western-emyn-muil",
+    "eastern-emyn-muil",
+    "north-ithilien",
+    "osgiliath"
+   ]
+  },
+  {
+   "key": "western-emyn-muil",
+   "name": "Western Emyn Muil",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "druadan-forest",
+    "eastemnet",
+    "western-brown-lands",
+    "eastern-brown-lands",
+    "eastern-emyn-muil",
+    "dead-marshes"
+   ]
+  },
+  {
+   "key": "eastern-emyn-muil",
+   "name": "Eastern Emyn Muil",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "western-emyn-muil",
+    "eastern-brown-lands",
+    "noman-lands",
+    "dagorlad",
+    "north-ithilien",
+    "dead-marshes"
+   ]
+  },
+  {
+   "key": "north-ithilien",
+   "name": "North Ithilien",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "dead-marshes",
+    "eastern-emyn-muil",
+    "dagorlad",
+    "minas-morgul",
+    "south-ithilien",
+    "osgiliath"
+   ]
+  },
+  {
+   "key": "south-ithilien",
+   "name": "South Ithilien",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "osgiliath",
+    "north-ithilien",
+    "minas-morgul",
+    "west-harondor",
+    "east-harondor"
+   ]
+  },
+  {
+   "key": "west-harondor",
+   "name": "West Harondor",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "pelargir",
+    "osgiliath",
+    "south-ithilien",
+    "east-harondor",
+    "near-harad",
+    "umbar"
+   ]
+  },
+  {
+   "key": "east-harondor",
+   "name": "East Harondor",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "west-harondor",
+    "south-ithilien",
+    "near-harad"
+   ]
+  },
+  {
+   "key": "western-brown-lands",
+   "name": "Western Brown Lands",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "parth-celebrant",
+    "south-anduin-vale",
+    "dol-guldur",
+    "eastern-brown-lands",
+    "western-emyn-muil",
+    "eastemnet"
+   ]
+  },
+  {
+   "key": "eastern-brown-lands",
+   "name": "Eastern Brown Lands",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "western-brown-lands",
+    "dol-guldur",
+    "southern-mirkwood",
+    "southern-rovanion",
+    "noman-lands",
+    "eastern-emyn-muil",
+    "western-emyn-muil"
+   ]
+  },
+  {
+   "key": "south-anduin-vale",
+   "name": "South Anduin Vale",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "dimrill-dale",
+    "north-anduin-vale",
+    "dol-guldur",
+    "western-brown-lands",
+    "parth-celebrant"
+   ]
+  },
+  {
+   "key": "north-anduin-vale",
+   "name": "North Anduin Vale",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "dimrill-dale",
+    "gladden-fields",
+    "rhosgobel",
+    "narrows-of-the-forest",
+    "dol-guldur",
+    "south-anduin-vale"
+   ]
+  },
+  {
+   "key": "carrock",
+   "name": "Carrock",
+   "nation": "NORTH",
+   "settlement": "TOWN",
+   "neighbours": [
+    "eagles-eyrie",
+    "old-ford",
+    "rhosgobel",
+    "old-forest-road",
+    "western-mirkwood",
+    "northern-mirkwood"
+   ]
+  },
+  {
+   "key": "rhosgobel",
+   "name": "Rhosgobel",
+   "nation": "NORTH",
+   "settlement": null,
+   "neighbours": [
+    "carrock",
+    "old-forest-road",
+    "narrows-of-the-forest",
+    "north-anduin-vale",
+    "gladden-fields",
+    "old-ford"
+   ]
+  },
+  {
+   "key": "northern-mirkwood",
+   "name": "Northern Mirkwood",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "carrock",
+    "western-mirkwood",
+    "woodland-realm",
+    "withered-heath"
+   ]
+  },
+  {
+   "key": "withered-heath",
+   "name": "Withered Heath",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "northern-mirkwood",
+    "erebor",
+    "dale",
+    "woodland-realm"
+   ]
+  },
+  {
+   "key": "western-mirkwood",
+   "name": "Western Mirkwood",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "carrock",
+    "northern-mirkwood",
+    "woodland-realm",
+    "old-forest-road"
+   ]
+  },
+  {
+   "key": "woodland-realm",
+   "name": "Woodland Realm",
+   "nation": "ELVES",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "western-mirkwood",
+    "northern-mirkwood",
+    "withered-heath",
+    "dale",
+    "old-forest-road"
+   ]
+  },
+  {
+   "key": "old-forest-road",
+   "name": "Old Forest Road",
+   "nation": "NORTH",
+   "settlement": null,
+   "neighbours": [
+    "rhosgobel",
+    "carrock",
+    "western-mirkwood",
+    "woodland-realm",
+    "dale",
+    "northern-rovanion",
+    "eastern-mirkwood",
+    "narrows-of-the-forest"
+   ]
+  },
+  {
+   "key": "narrows-of-the-forest",
+   "name": "Narrows of the Forest",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "rhosgobel",
+    "old-forest-road",
+    "eastern-mirkwood",
+    "dol-guldur",
+    "north-anduin-vale"
+   ]
+  },
+  {
+   "key": "eastern-mirkwood",
+   "name": "Eastern Mirkwood",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "narrows-of-the-forest",
+    "old-forest-road",
+    "northern-rovanion",
+    "southern-mirkwood",
+    "dol-guldur"
+   ]
+  },
+  {
+   "key": "dale",
+   "name": "Dale",
+   "nation": "NORTH",
+   "settlement": "CITY",
+   "neighbours": [
+    "woodland-realm",
+    "withered-heath",
+    "erebor",
+    "iron-hills",
+    "vale-of-the-carnen",
+    "northern-rovanion",
+    "old-forest-road"
+   ]
+  },
+  {
+   "key": "erebor",
+   "name": "Erebor",
+   "nation": "DWARVES",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "withered-heath",
+    "iron-hills",
+    "dale"
+   ]
+  },
+  {
+   "key": "iron-hills",
+   "name": "Iron Hills",
+   "nation": "DWARVES",
+   "settlement": "TOWN",
+   "neighbours": [
+    "erebor",
+    "dale",
+    "vale-of-the-carnen",
+    "east-rhun"
+   ]
+  },
+  {
+   "key": "vale-of-the-carnen",
+   "name": "Vale of the Carnen",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "dale",
+    "iron-hills",
+    "north-rhun",
+    "east-rhun",
+    "vale-of-the-celduin",
+    "northern-rovanion"
+   ]
+  },
+  {
+   "key": "north-rhun",
+   "name": "North Rhûn",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": "TOWN",
+   "neighbours": [
+    "vale-of-the-carnen",
+    "east-rhun",
+    "vale-of-the-celduin",
+    "northern-dorwinion"
+   ]
+  },
+  {
+   "key": "east-rhun",
+   "name": "East Rhûn",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": null,
+   "neighbours": [
+    "iron-hills",
+    "north-rhun",
+    "south-rhun",
+    "vale-of-the-carnen"
+   ]
+  },
+  {
+   "key": "south-rhun",
+   "name": "South Rhûn",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": "TOWN",
+   "neighbours": [
+    "east-rhun",
+    "ash-mountains",
+    "southern-dorwinion"
+   ]
+  },
+  {
+   "key": "northern-rovanion",
+   "name": "Northern Rovanion",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "eastern-mirkwood",
+    "old-forest-road",
+    "dale",
+    "vale-of-the-carnen",
+    "vale-of-the-celduin",
+    "southern-rovanion",
+    "southern-mirkwood"
+   ]
+  },
+  {
+   "key": "southern-rovanion",
+   "name": "Southern Rovanion",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "northern-rovanion",
+    "vale-of-the-celduin",
+    "northern-dorwinion",
+    "southern-dorwinion",
+    "noman-lands",
+    "eastern-brown-lands",
+    "southern-mirkwood"
+   ]
+  },
+  {
+   "key": "vale-of-the-celduin",
+   "name": "Vale of the Celduin",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "northern-rovanion",
+    "vale-of-the-carnen",
+    "north-rhun",
+    "northern-dorwinion",
+    "southern-rovanion"
+   ]
+  },
+  {
+   "key": "northern-dorwinion",
+   "name": "Northern Dorwinion",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "southern-rovanion",
+    "vale-of-the-celduin",
+    "north-rhun",
+    "southern-dorwinion"
+   ]
+  },
+  {
+   "key": "southern-dorwinion",
+   "name": "Southern Dorwinion",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "northern-dorwinion",
+    "southern-rovanion",
+    "noman-lands",
+    "ash-mountains",
+    "south-rhun"
+   ]
+  },
+  {
+   "key": "ash-mountains",
+   "name": "Ash Mountains",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "south-rhun",
+    "southern-dorwinion",
+    "noman-lands",
+    "dagorlad"
+   ]
+  },
+  {
+   "key": "noman-lands",
+   "name": "Noman-Lands",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "eastern-emyn-muil",
+    "eastern-brown-lands",
+    "southern-rovanion",
+    "southern-dorwinion",
+    "ash-mountains",
+    "dagorlad"
+   ]
+  },
+  {
+   "key": "dagorlad",
+   "name": "Dagorlad",
+   "nation": null,
+   "settlement": null,
+   "neighbours": [
+    "north-ithilien",
+    "eastern-emyn-muil",
+    "noman-lands",
+    "ash-mountains",
+    "morannon"
+   ]
+  },
+  {
+   "key": "dol-guldur",
+   "name": "Dol Guldur",
+   "nation": "SAURON",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "south-anduin-vale",
+    "north-anduin-vale",
+    "narrows-of-the-forest",
+    "eastern-mirkwood",
+    "southern-mirkwood",
+    "eastern-brown-lands",
+    "western-brown-lands"
+   ]
+  },
+  {
+   "key": "southern-mirkwood",
+   "name": "Southern Mirkwood",
+   "nation": "SAURON",
+   "settlement": null,
+   "neighbours": [
+    "dol-guldur",
+    "eastern-mirkwood",
+    "northern-rovanion",
+    "southern-rovanion",
+    "eastern-brown-lands"
+   ]
+  },
+  {
+   "key": "umbar",
+   "name": "Umbar",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "west-harondor",
+    "near-harad"
+   ]
+  },
+  {
+   "key": "near-harad",
+   "name": "Near Harad",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": "TOWN",
+   "neighbours": [
+    "umbar",
+    "west-harondor",
+    "east-harondor",
+    "khand",
+    "far-harad"
+   ]
+  },
+  {
+   "key": "far-harad",
+   "name": "Far Harad",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": "CITY",
+   "neighbours": [
+    "near-harad",
+    "khand"
+   ]
+  },
+  {
+   "key": "khand",
+   "name": "Khand",
+   "nation": "SOUTHRONS_EASTERLINGS",
+   "settlement": null,
+   "neighbours": [
+    "near-harad",
+    "far-harad"
+   ]
+  },
+  {
+   "key": "nurn",
+   "name": "Nurn",
+   "nation": "SAURON",
+   "settlement": "TOWN",
+   "neighbours": [
+    "gorgoroth"
+   ]
+  },
+  {
+   "key": "gorgoroth",
+   "name": "Gorgoroth",
+   "nation": "SAURON",
+   "settlement": null,
+   "neighbours": [
+    "nurn",
+    "minas-morgul",
+    "barad-dur",
+    "morannon"
+   ]
+  },
+  {
+   "key": "minas-morgul",
+   "name": "Minas Morgul",
+   "nation": "SAURON",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "gorgoroth",
+    "north-ithilien",
+    "south-ithilien"
+   ]
+  },
+  {
+   "key": "barad-dur",
+   "name": "Barad-dûr",
+   "nation": "SAURON",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "gorgoroth"
+   ]
+  },
+  {
+   "key": "morannon",
+   "name": "Morannon",
+   "nation": "SAURON",
+   "settlement": "STRONGHOLD",
+   "neighbours": [
+    "gorgoroth",
+    "dagorlad"
+   ]
+  }
+ ],
+ "units": [
+  "regular",
+  "elite",
+  "leader",
+  "nazgul"
+ ],
+ "characters": [
+  {
+   "key": "gandalf-the-grey",
+   "name": "Gandalf the Grey",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "strider",
+   "name": "Strider",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "boromir",
+   "name": "Boromir",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "legolas",
+   "name": "Legolas",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "gimli",
+   "name": "Gimli",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "meriadoc",
+   "name": "Meriadoc Brandybuck",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "peregrin",
+   "name": "Peregrin Took",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "gandalf-the-white",
+   "name": "Gandalf the White",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "aragorn",
+   "name": "Aragorn",
+   "side": "FREE_PEOPLES",
+   "type": "COMPANION"
+  },
+  {
+   "key": "gollum",
+   "name": "Gollum",
+   "side": "FREE_PEOPLES",
+   "type": "GOLLUM"
+  },
+  {
+   "key": "ring-bearers",
+   "name": "The Ring-bearers",
+   "side": "FREE_PEOPLES",
+   "type": "RING_BEARERS"
+  },
+  {
+   "key": "saruman",
+   "name": "Saruman",
+   "side": "SHADOW",
+   "type": "MINION"
+  },
+  {
+   "key": "witch-king",
+   "name": "The Witch-king",
+   "side": "SHADOW",
+   "type": "MINION"
+  },
+  {
+   "key": "mouth-of-sauron",
+   "name": "The Mouth of Sauron",
+   "side": "SHADOW",
+   "type": "MINION"
+  }
+ ],
+ "cards": [
+  {
+   "key": "fp-char-01",
+   "title": "Elven Cloaks",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 1
+  },
+  {
+   "key": "fp-char-02",
+   "title": "Elven Rope",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 2
+  },
+  {
+   "key": "fp-char-03",
+   "title": "Phial of Galadriel",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 3
+  },
+  {
+   "key": "fp-char-04",
+   "title": "Sméagol Helps Nice Master",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 4
+  },
+  {
+   "key": "fp-char-05",
+   "title": "Mithril Coat and Sting",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 5
+  },
+  {
+   "key": "fp-char-06",
+   "title": "Axe and Bow",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 6
+  },
+  {
+   "key": "fp-char-07",
+   "title": "Horn of Gondor",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 7
+  },
+  {
+   "key": "fp-char-08",
+   "title": "Wizard's Staff",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 8
+  },
+  {
+   "key": "fp-char-09",
+   "title": "Athelas",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 9
+  },
+  {
+   "key": "fp-char-10",
+   "title": "There is Another Way",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 10
+  },
+  {
+   "key": "fp-char-11",
+   "title": "I Will Go Alone",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 11
+  },
+  {
+   "key": "fp-char-12",
+   "title": "Bilbo's Song",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 12
+  },
+  {
+   "key": "fp-char-13",
+   "title": "Mirror of Galadriel",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 13
+  },
+  {
+   "key": "fp-char-14",
+   "title": "Challenge of the King",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 14
+  },
+  {
+   "key": "fp-char-15",
+   "title": "Gwaihir the Windlord",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 15
+  },
+  {
+   "key": "fp-char-16",
+   "title": "We Prove the Swifter",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 16
+  },
+  {
+   "key": "fp-char-17",
+   "title": "There and Back Again",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 17
+  },
+  {
+   "key": "fp-char-18",
+   "title": "The Eagles are Coming!",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 18
+  },
+  {
+   "key": "fp-char-19",
+   "title": "The Ents Awake: Treebeard",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 19
+  },
+  {
+   "key": "fp-char-20",
+   "title": "The Ents Awake: Huorns",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 20
+  },
+  {
+   "key": "fp-char-21",
+   "title": "The Ents Awake: Entmoot",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 21
+  },
+  {
+   "key": "fp-char-22",
+   "title": "Dead Men of Dunharrow",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 22
+  },
+  {
+   "key": "fp-char-23",
+   "title": "House of the Stewards",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 23
+  },
+  {
+   "key": "fp-char-24",
+   "title": "The Grey Company",
+   "side": "FREE_PEOPLES",
+   "deck": "CHARACTER",
+   "number": 24
+  },
+  {
+   "key": "fp-strat-01",
+   "title": "The Last Battle",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 1
+  },
+  {
+   "key": "fp-strat-02",
+   "title": "A Power too Great",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 2
+  },
+  {
+   "key": "fp-strat-03",
+   "title": "The Power of Tom Bombadil",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 3
+  },
+  {
+   "key": "fp-strat-04",
+   "title": "Book of Mazarbul",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 4
+  },
+  {
+   "key": "fp-strat-05",
+   "title": "The Spirit of Mordor",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 5
+  },
+  {
+   "key": "fp-strat-06",
+   "title": "Faramir's Rangers",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 6
+  },
+  {
+   "key": "fp-strat-07",
+   "title": "Fear! Fire! Foes!",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 7
+  },
+  {
+   "key": "fp-strat-08",
+   "title": "Wisdom of Elrond",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 8
+  },
+  {
+   "key": "fp-strat-09",
+   "title": "The Red Arrow",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 9
+  },
+  {
+   "key": "fp-strat-10",
+   "title": "Help Unlooked For",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 10
+  },
+  {
+   "key": "fp-strat-11",
+   "title": "Paths of the Woses",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 11
+  },
+  {
+   "key": "fp-strat-12",
+   "title": "Through a Day and a Night",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 12
+  },
+  {
+   "key": "fp-strat-13",
+   "title": "Círdan's Ships",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 13
+  },
+  {
+   "key": "fp-strat-14",
+   "title": "Guards of the Citadel",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 14
+  },
+  {
+   "key": "fp-strat-15",
+   "title": "Celeborn's Galadhrim",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 15
+  },
+  {
+   "key": "fp-strat-16",
+   "title": "Riders of Théoden",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 16
+  },
+  {
+   "key": "fp-strat-17",
+   "title": "Grimbeorn the Old, Son of Beorn",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 17
+  },
+  {
+   "key": "fp-strat-18",
+   "title": "Imrahil of Dol Amroth",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 18
+  },
+  {
+   "key": "fp-strat-19",
+   "title": "King Brand's Men",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 19
+  },
+  {
+   "key": "fp-strat-20",
+   "title": "Swords of Eriador",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 20
+  },
+  {
+   "key": "fp-strat-21",
+   "title": "Kindred of Glorfindel",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 21
+  },
+  {
+   "key": "fp-strat-22",
+   "title": "Dain Ironfoot's Guard",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 22
+  },
+  {
+   "key": "fp-strat-23",
+   "title": "Éomer, Son of Éomund",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 23
+  },
+  {
+   "key": "fp-strat-24",
+   "title": "Thranduil's Archers",
+   "side": "FREE_PEOPLES",
+   "deck": "STRATEGY",
+   "number": 24
+  },
+  {
+   "key": "sh-char-01",
+   "title": "Shelob's Lair",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 1
+  },
+  {
+   "key": "sh-char-02",
+   "title": "The Ring is Mine!",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 2
+  },
+  {
+   "key": "sh-char-03",
+   "title": "On, On They Went",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 3
+  },
+  {
+   "key": "sh-char-04",
+   "title": "Give it to Uss!",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 4
+  },
+  {
+   "key": "sh-char-05",
+   "title": "Orc Patrol",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 5
+  },
+  {
+   "key": "sh-char-06",
+   "title": "Isildur's Bane",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 6
+  },
+  {
+   "key": "sh-char-07",
+   "title": "Foul Thing from the Deep",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 7
+  },
+  {
+   "key": "sh-char-08",
+   "title": "Candles of Corpses",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 8
+  },
+  {
+   "key": "sh-char-09",
+   "title": "Nazgûl Search",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 9
+  },
+  {
+   "key": "sh-char-10",
+   "title": "Cruel Weather",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 10
+  },
+  {
+   "key": "sh-char-11",
+   "title": "The Nazgûl Strike!",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 11
+  },
+  {
+   "key": "sh-char-12",
+   "title": "Morgul Wound",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 12
+  },
+  {
+   "key": "sh-char-13",
+   "title": "Lure of the Ring",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 13
+  },
+  {
+   "key": "sh-char-14",
+   "title": "The Breaking of the Fellowship",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 14
+  },
+  {
+   "key": "sh-char-15",
+   "title": "Worn with Sorrow and Toil",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 15
+  },
+  {
+   "key": "sh-char-16",
+   "title": "Flocks of Crebain",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 16
+  },
+  {
+   "key": "sh-char-17",
+   "title": "Balrog of Moria",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 17
+  },
+  {
+   "key": "sh-char-18",
+   "title": "The Lidless Eye",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 18
+  },
+  {
+   "key": "sh-char-19",
+   "title": "Dreadful Spells",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 19
+  },
+  {
+   "key": "sh-char-20",
+   "title": "Grond, Hammer of the Underworld",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 20
+  },
+  {
+   "key": "sh-char-21",
+   "title": "The Palantír of Orthanc",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 21
+  },
+  {
+   "key": "sh-char-22",
+   "title": "Wormtongue",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 22
+  },
+  {
+   "key": "sh-char-23",
+   "title": "The Ringwraiths Are Abroad",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 23
+  },
+  {
+   "key": "sh-char-24",
+   "title": "The Black Captain Commands",
+   "side": "SHADOW",
+   "deck": "CHARACTER",
+   "number": 24
+  },
+  {
+   "key": "sh-strat-01",
+   "title": "Return to Valinor",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 1
+  },
+  {
+   "key": "sh-strat-02",
+   "title": "The Fighting Uruk-hai",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 2
+  },
+  {
+   "key": "sh-strat-03",
+   "title": "Denethor's Folly",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 3
+  },
+  {
+   "key": "sh-strat-04",
+   "title": "The Day Without Dawn",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 4
+  },
+  {
+   "key": "sh-strat-05",
+   "title": "Threats and Promises",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 5
+  },
+  {
+   "key": "sh-strat-06",
+   "title": "Stormcrow",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 6
+  },
+  {
+   "key": "sh-strat-07",
+   "title": "Shadows Gather",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 7
+  },
+  {
+   "key": "sh-strat-08",
+   "title": "The Shadow Lengthens",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 8
+  },
+  {
+   "key": "sh-strat-09",
+   "title": "The Shadow is Moving",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 9
+  },
+  {
+   "key": "sh-strat-10",
+   "title": "Corsairs of Umbar",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 10
+  },
+  {
+   "key": "sh-strat-11",
+   "title": "Rage of the Dunlendings",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 11
+  },
+  {
+   "key": "sh-strat-12",
+   "title": "Return of the Witch-king",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 12
+  },
+  {
+   "key": "sh-strat-13",
+   "title": "Half-orcs and Goblin-men",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 13
+  },
+  {
+   "key": "sh-strat-14",
+   "title": "Olog-hai",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 14
+  },
+  {
+   "key": "sh-strat-15",
+   "title": "Hill-trolls",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 15
+  },
+  {
+   "key": "sh-strat-16",
+   "title": "A New Power is Rising",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 16
+  },
+  {
+   "key": "sh-strat-17",
+   "title": "Many Kings to the Service of Mordor",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 17
+  },
+  {
+   "key": "sh-strat-18",
+   "title": "The King is Revealed",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 18
+  },
+  {
+   "key": "sh-strat-19",
+   "title": "Shadows on the Misty Mountains",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 19
+  },
+  {
+   "key": "sh-strat-20",
+   "title": "Orcs Multiplying Again",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 20
+  },
+  {
+   "key": "sh-strat-21",
+   "title": "Horde From the East",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 21
+  },
+  {
+   "key": "sh-strat-22",
+   "title": "Monsters Roused",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 22
+  },
+  {
+   "key": "sh-strat-23",
+   "title": "Musterings of Long-planned War",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 23
+  },
+  {
+   "key": "sh-strat-24",
+   "title": "Pits of Mordor",
+   "side": "SHADOW",
+   "deck": "STRATEGY",
+   "number": 24
+  }
+ ],
+ "die_faces": [
+  "CHARACTER",
+  "ARMY",
+  "MUSTER",
+  "ARMY_MUSTER",
+  "EVENT",
+  "WILL_OF_THE_WEST",
+  "EYE"
+ ],
+ "hunt_tiles": [
+  "eye-1",
+  "eye-2",
+  "eye-3",
+  "eye-4",
+  "3-1",
+  "3-2",
+  "3-3",
+  "2-1",
+  "2-2",
+  "1-1",
+  "1-2",
+  "2r",
+  "1r-1",
+  "1r-2",
+  "0r-1",
+  "0r-2",
+  "elven-cloaks",
+  "elven-rope",
+  "phial-of-galadriel",
+  "smeagol-helps-nice-master",
+  "shelobs-lair",
+  "the-ring-is-mine",
+  "on-on-they-went",
+  "give-it-to-uss"
+ ]
+}
