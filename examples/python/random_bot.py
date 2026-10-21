@@ -49,6 +49,7 @@ class Bot:
         self.token = token
         self.rng = random.Random(seed)
         self.side = None
+        self.score = {"games": 0, "won": 0}
 
     def handle(self, message):
         """The answer to one message from the referee (a dict), or None. Raises SystemExit on quit."""
@@ -61,6 +62,7 @@ class Bot:
             return answer
         if kind == "new_game":
             self.side = message.get("side")
+            log("game", self.score["games"] + 1, "started:", message.get("game"), "as", self.side)
             if self.fixed_seed is None:
                 self.rng = random.Random(message.get("seed_bot"))
             return {"type": "ready", "id": message.get("id")}
@@ -72,8 +74,11 @@ class Bot:
             return None
         if kind == "game_over":
             log("game over:", message.get("winner"), message.get("how"), "turn", message.get("turn"), "(I played", self.side + ")")
+            self.score["games"] += 1
+            self.score["won"] += message.get("winner") == self.side
             return None
         if kind == "quit":
+            log("match over: won", self.score["won"], "of", self.score["games"])
             raise SystemExit(0)
         if kind in ("options", "timeout", "error"):
             if kind != "options":
@@ -89,6 +94,8 @@ class Bot:
         options = decision["options"]
         # A real bot reads message["view"] (the position as this side knows it) and the options' fields here.
         choice = self.rng.choice(options)
+        if self.verbose:
+            log("decide", decision.get("kind"), "->", choice.get("text") or choice.get("kind"), "of", len(options))
         return {"type": "choice", "id": message["id"], "o": choice["o"], "fingerprint": decision.get("fingerprint"),
                 "info": {"picked": choice.get("kind")}}
 
@@ -223,9 +230,9 @@ def main():
     parser.add_argument("--seed", type=int, help="this bot's own seed (default: each game's seed_bot)")
     parser.add_argument("--name", default="random-example")
     parser.add_argument("--events", action="store_true", help="ask for the event stream")
-    parser.add_argument("--verbose", action="store_true", help="print the events to stderr")
+    parser.add_argument("--verbose", action="store_true", help="print each decision and the events to stderr (asks for events)")
     args = parser.parse_args()
-    bot = Bot(args.name, args.seed, args.events, args.verbose, args.token)
+    bot = Bot(args.name, args.seed, args.events or args.verbose, args.verbose, args.token)
     if args.connect:
         run_websocket(bot, args.connect)
     else:
