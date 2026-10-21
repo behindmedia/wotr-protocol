@@ -7,8 +7,10 @@ whatever language or rules engine each is written in.
   list of legal options at each decision, and answer with an option id. JSON Lines over stdin/stdout or a WebSocket.
 - **[vocabulary/](vocabulary/)**: the shared names for regions (with their neighbours), nations, characters, cards
   (keys and titles only), die faces and Hunt tiles.
-- **[examples/](examples/)**: example bots to start from.
-- **[conformance/](conformance/)**: recorded games for checking a referee or a bot.
+- **[examples/python/random_bot.py](examples/python/random_bot.py)**: a complete example bot (random legal moves,
+  standard library only), over stdin/stdout or a WebSocket: the template to start from.
+- **[conformance/](conformance/)**: three recorded games (Ring, Corruption and military wins) with every random
+  outcome, option fingerprint and choice, for checking a referee or a bot.
 
 ## A hosted referee
 
