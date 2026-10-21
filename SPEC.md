@@ -32,9 +32,9 @@ This is how chess (UCI) and Go (GTP) engines are run against each other, adapted
 - **Local**: the referee starts the bot as a child process and talks over its stdin and stdout. Anything the bot writes
   to stderr is a log, never protocol.
 - **Remote** (changed in implementation: the bot dials the referee): the bot opens a
-  **WebSocket** to the referee, e.g. the hosted referee `wss://wotr.behindmedia.com/referee` (coming),
+  **WebSocket** to the referee, e.g. the hosted referee `wss://wotr.behindmedia.com/referee` (§12),
   one message per text frame; the referee speaks first (`hello`) once connected. The bot authenticates with a **token**,
-  in the URL (`?token=…`) or as `"token"` in its `hello`; a bot without a known token gets
+  in the URL (`?token=…`), as a bearer token of the WebSocket's request, or as `"token"` in its `hello`; a bot without a known token gets
   `{"type":"error","id":1,"code":"unauthorized"}` and the connection closes. A plain TCP stream (one message per line)
   is the same protocol (not offered by the hosted referee yet).
 - Every message has a `"type"`. Requests from the referee that need an answer carry an `"id"`; the answer repeats it.
@@ -56,6 +56,8 @@ referee → bot   {"type":"game_over","game":"g-87000005-fp-a","winner":"FREE_PE
 referee → bot   {"type":"quit"}
 ```
 
+- A referee may send a `match` object in `options`: the match's rules and the bot's seat (§12). A bot that does not
+  use it ignores it.
 - **One game at a time per connection** in 0.1. A match runner opens one connection per bot per game, or reuses it
   (the reference referee reuses it for the whole match).
 - `seed_bot` is the bot's own seed, for reproducible matches. The game's seed is **never** sent: it would reveal the
@@ -67,7 +69,9 @@ referee → bot   {"type":"quit"}
   `name`, `type` `int`/`bool`/`string`, `default`, `min`, `max`; the referee answers every declared option in
   `options.values`, its default unless the match sets it).
 - `game_over`: `winner` is null for a draw at the referee's turn cap; `how` is the rulebook's victory
-  (`RING_DESTROYED`, `CORRUPTION`, `SHADOW_MILITARY`, `FREE_PEOPLES_MILITARY`), `TURN_CAP` or `FORFEIT`.
+  (`RING_DESTROYED`, `CORRUPTION`, `SHADOW_MILITARY`, `FREE_PEOPLES_MILITARY`), `TURN_CAP`, `FORFEIT` or `ABORTED`
+  (the referee ended the game from outside: a match's time limit, a cancelled match, a restart; `winner` is null and
+  the game does not count).
 
 ## 4. Decisions
 
@@ -104,12 +108,13 @@ bot → referee   {"type":"choice","id":17,"o":1,"fingerprint":"3f9a5c0e7d21b8a4
   never shows it to the opponent.
 - **Time**: `clock` says how much time is left for this decision (`per_decision`) or for the whole game (`game`, with
   an increment; not implemented yet). A bot that misses the deadline gets a `timeout` notice
-  (`{"type":"timeout","id":17,"game":"…","played":0}`); the referee then plays option 0 (or forfeits the game, if the
-  match rules say so; not implemented yet). An answer that comes later is ignored.
+  (`{"type":"timeout","id":17,"game":"…","played":0}`); the referee then plays option 0 (or, if the match's rules say so,
+  the N-th timeout in a game forfeits it). An answer that comes later is ignored.
 - **Illegal or unknown answers**: the referee answers `{"type":"error","id":17,"code":"illegal_option"}` and asks again,
   once (a new `decide` with a new id); a second illegal answer forfeits the game. Codes (changed in implementation):
   `illegal_option` (no such `o`), `stale_fingerprint` (an echoed fingerprint that is not the decision's),
-  `not_a_choice` (another message answered the `decide`), `unknown_type`, `unauthorized`. A bot whose connection
+  `not_a_choice` (another message answered the `decide`), `unknown_type`, `unauthorized`; a hosted referee also
+  `unavailable`, `rate_limited`, `busy`, `seat_taken`, `match_over`, `line_too_long` (§12). A bot whose connection
   ends forfeits the game at its next decision.
 - **`get_view`**: while a decision is open, `{"type":"get_view","id":…}` is answered with
   `{"type":"view","id":…,"view":{…}}`.
@@ -318,13 +323,40 @@ side. Records use the same vocabulary, so any referee can replay and check them.
 4. **Remote play between servers** (each author hosts their own bot): settled for 0.1 as the bot dialling the
    referee's WebSocket with a token (§2).
 5. **Human play**: the same protocol could let a person's client play through a referee; out of scope for 0.1.
-6. **Who hosts the reference referee** and the conformance games: our server will host an open referee (owner,
-   2026-10-21); the specification, the vocabulary, the conformance games and the example clients go to a public
+6. **Who hosts the reference referee** and the conformance games: the reference referee is hosted at
+   `wss://wotr.behindmedia.com/referee` (§12); matches are made by members of the site. The specification, the vocabulary, the conformance games and the example clients go to a public
    repository of their own.
 7. **Skipped questions** (found in implementation): the reference referee does not ask for a Combat card when the side has none
    it can play, so whether a side was asked tells its opponent a little about its hand. The reference referee keeps that
    behaviour; a bot following the game sees it as a `choice` event that is not there. Should
    a referee always ask (with `none` as the only option)?
+
+## 12. A hosted referee
+
+A referee open to the public plays **matches** made in advance, each with fixed rules and two seat tokens.
+
+- **Seats**: a token is valid for one seat of one match; one connection per seat at a time. Both seats connected,
+  the games begin. A seat that drops forfeits the game in progress; it may reconnect with its token within 5
+  minutes for the next game, else it forfeits the remaining games.
+- **The `match` object** in `options`:
+  `{"id":"m-…","name":"nightly","games":2,"max_turns":25,"clock_ms":10000,"timeouts_forfeit":3,"paired_seeds":false,"seat":"A","opponent":"bot","games_done":0}`.
+  `max_turns` null: no turn cap. `timeouts_forfeit` 0: a timeout plays option 0; N: the N-th timeout in a game
+  forfeits it. `paired_seeds` true: one seed for each pair of games, the sides swapped (a bot that remembers game 1
+  knows the other side's opening hand in game 2). `opponent`: `bot`, or `greedy` (the referee's own test bot).
+  `games_done`: games of the match already played (after a reconnection).
+- **Sides**: a coin flip for game 1's Free Peoples, then alternating.
+- **Ids and seeds**: game ids are random; `seed_bot` is derived from a secret of the referee and the game id, never
+  from the game's seed.
+- **Extensions**: none.
+- **Limits**: a message of at most 16 KiB; at most 8 `get_view` per decision (more: `error` `rate_limited`, the
+  decision stays open); at most 20 messages a second that answer nothing asked (more: `rate_limited`, and the
+  connection closes); a bot's name and version are kept to 64 characters.
+- **Refusals**, each `{"type":"error","code":…,"message":…}` followed by the end of the connection: `unavailable`
+  (the referee is off or restarting), `unauthorized` (unknown token), `rate_limited` (too many wrong tokens from one
+  address), `busy` (too many matches running: try later), `seat_taken` (that seat is connected), `match_over` (the
+  match is finished, cancelled or expired), `line_too_long`.
+- **Time limits**: a match not started within 24 hours expires; one running longer than 12 hours ends, its game in
+  progress not counted (`ABORTED`).
 
 ## Connecting your bot
 
@@ -332,7 +364,7 @@ side. Records use the same vocabulary, so any referee can replay and check them.
    `hello`, answers `new_game` with `ready`, and answers each `decide` with a random option. Replace the choice with
    your bot's.
 2. Run it against a referee locally over stdin/stdout, or dial the hosted referee
-   `wss://wotr.behindmedia.com/referee?token=…` (coming; tokens on request) with
-   `python3 random_bot.py --connect "wss://…?token=…"`.
+   `wss://wotr.behindmedia.com/referee` with a match's seat token (README, "Play on the hosted referee"):
+   `python3 random_bot.py --connect wss://wotr.behindmedia.com/referee --token wotr_seat_…`.
 3. Check your bot against the conformance games in [`conformance/`](conformance/): every decision there lists its
    options and the choice made, so a bot can be replayed through them.
