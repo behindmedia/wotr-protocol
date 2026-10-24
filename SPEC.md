@@ -1,13 +1,16 @@
-# WotR Bot Protocol (draft 0.1)
+# WotR Bot Protocol (draft 0.2)
 
-A text protocol that lets computer opponents for **War of the Ring, Second Edition** (base game) play each other, and
-people, whatever language or rules engine each is written in. Draft for discussion with the authors of other War of the
-Ring bots (2026-10-21); nothing here is final.
+A text protocol that lets computer opponents for **War of the Ring, Second Edition** (the base game and, since 0.2,
+the expansion **Lords of Middle-earth** with and without its Council of Rivendell) play each other, and people, whatever
+language or rules engine each is written in. Draft for discussion with the authors of other War of the Ring bots
+(0.1: 2026-10-21; 0.2: 2026-10-24); nothing here is final.
 
-**Status (2026-10-21).** A referee implementing this draft exists and is being prepared as an open, hosted referee
-(see "Connecting your bot" at the end). Where the implementation had to settle what the draft left open, or differs
-from it, the text says **changed in implementation:** at that place; the version stays 0.1. Not implemented yet: the
-`game` clock (only `per_decision`) and forfeiting on a timeout.
+**Status (2026-10-24).** A referee implementing this draft runs as an open, hosted referee (§12; "Connecting your bot"
+at the end), which also seats bots in games against people (§14). Where the implementation had to settle what the
+draft left open, or differs from it, the text says **changed in implementation:** at that place. **0.2** adds the
+rulesets and Lords of Middle-earth (§13) and is backwards compatible: a 0.1 bot keeps working unchanged and is only
+ever given base games (CHANGELOG.md). The `game` clock is used in online play (§14); matches use `per_decision`, and
+forfeiting on a timeout is a rule of the hosted referee's matches (§12).
 
 ## 1. Why this shape
 
@@ -44,9 +47,10 @@ This is how chess (UCI) and Go (GTP) engines are run against each other, adapted
 ## 3. The session
 
 ```
-referee → bot   {"type":"hello","protocol":"wotr-bot/0.1","referee":"wotr-referee 2026.10","id":1}
-bot → referee   {"type":"hello","id":1,"protocol":"wotr-bot/0.1","name":"ExampleBot","version":"1.0","author":"…",
-                 "events":true,"options":[{"name":"sims","type":"int","default":300,"min":1,"max":100000}]}
+referee → bot   {"type":"hello","protocol":"wotr-bot/0.2","referee":"wotr-referee 2026.10","id":1}
+bot → referee   {"type":"hello","id":1,"protocol":"wotr-bot/0.2","name":"ExampleBot","version":"1.0","author":"…",
+                 "events":true,"rulesets":["base","lome","lome:council"],
+                 "options":[{"name":"sims","type":"int","default":300,"min":1,"max":100000}]}
 referee → bot   {"type":"options","values":{"sims":300}}
 referee → bot   {"type":"new_game","id":2,"game":"g-87000005-fp-a","side":"SHADOW","rules":"base-2e","variant":[],
                  "seed_bot":12345,"clock":{"kind":"per_decision","ms":10000}}
@@ -58,13 +62,15 @@ referee → bot   {"type":"quit"}
 
 - A referee may send a `match` object in `options`: the match's rules and the bot's seat (§12). A bot that does not
   use it ignores it.
-- **One game at a time per connection** in 0.1. A match runner opens one connection per bot per game, or reuses it
-  (the reference referee reuses it for the whole match).
+- **One game at a time per connection** (0.1 and 0.2). A match runner opens one connection per bot per game, or
+  reuses it (the reference referee reuses it for the whole match).
 - `seed_bot` is the bot's own seed, for reproducible matches. The game's seed is **never** sent: it would reveal the
   dice and the decks.
-- `rules`: `"base-2e"` is the Second Edition base game with the published errata (see §9). `variant` lists optional
-  rules both sides agreed on; empty in 0.1.
+- `rules`: `"base-2e"` is the Second Edition base game with the published errata (see §9). `variant` lists the
+  expansion and its variants the game is played with (0.2, §13: `["lome"]`, `["lome","council"]`; then also
+  `ruleset`, its canonical key); empty for the base game.
 - The bot's `hello` (changed in implementation, all optional): `events` (true: send the events of §8), `token` (§2),
+  `rulesets` (0.2, §13: the rules it plays; absent: the base game only),
   `extensions` (names of referee-specific additions it wants), `options` (each with
   `name`, `type` `int`/`bool`/`string`, `default`, `min`, `max`; the referee answers every declared option in
   `options.values`, its default unless the match sets it).
@@ -107,7 +113,7 @@ bot → referee   {"type":"choice","id":17,"o":1,"fingerprint":"3f9a5c0e7d21b8a4
 - **`info`** (optional): anything the bot wants logged (visits, value, principal line). The referee records it and
   never shows it to the opponent.
 - **Time**: `clock` says how much time is left for this decision (`per_decision`) or for the whole game (`game`, with
-  an increment; not implemented yet). A bot that misses the deadline gets a `timeout` notice
+  an increment; used in online play, §14). A bot that misses the deadline gets a `timeout` notice
   (`{"type":"timeout","id":17,"game":"…","played":0}`); the referee then plays option 0 (or, if the match's rules say so,
   the N-th timeout in a game forfeits it). An answer that comes later is ignored.
 - **Illegal or unknown answers**: the referee answers `{"type":"error","id":17,"code":"illegal_option"}` and asks again,
@@ -122,7 +128,8 @@ bot → referee   {"type":"choice","id":17,"o":1,"fingerprint":"3f9a5c0e7d21b8a4
 ## 5. Decision kinds (0.1)
 
 Every option has a `kind` (what it does) and the fields listed. All 26 kinds are implemented; the fields are as built
-(changed in implementation where the draft named them otherwise, marked ✱ and explained under the table).
+(changed in implementation where the draft named them otherwise, marked ✱ and explained under the table). 0.2 adds
+five kinds and some options for Lords of Middle-earth (§13); a base game asks only these 26.
 
 | Kind | The question | Options (`kind` and fields) |
 |---|---|---|
@@ -180,12 +187,14 @@ Every option has a `kind` (what it does) and the fields listed. All 26 kinds are
   (Gandalf the Grey as Guide, the Palantír of Orthanc) is `CARD_CHOICE` with `draw` + `deck` options and a context
   `{"deck": …}` (or none for either deck).
 
-A referee must not add kinds without a protocol version change; a bot must answer any kind it receives (option 0 is
-always a legal fallback).
+A referee must not add kinds without a protocol version change (0.2 is one: §13); a bot must answer any kind it
+receives (option 0 is always a legal fallback).
 
 ## 6. The vocabulary
 
-Stable, lower-case keys from the rulebook's names; the full lists are in [`vocabulary/vocabulary-0.1.json`](vocabulary/vocabulary-0.1.json).
+Stable, lower-case keys from the rulebook's names; the full lists are in [`vocabulary/vocabulary-0.2.json`](vocabulary/vocabulary-0.2.json)
+(a superset of [`vocabulary-0.1.json`](vocabulary/vocabulary-0.1.json), the base game's, which stays as it was; what
+Lords of Middle-earth adds is marked `"expansion": "lome"` there and listed in §13).
 
 - **Sides**: `FREE_PEOPLES`, `SHADOW`.
 - **Nations**: `DWARVES`, `ELVES`, `GONDOR`, `NORTH`, `ROHAN`, `ISENGARD`, `SAURON`, `SOUTHRONS_EASTERLINGS`.
@@ -198,7 +207,8 @@ Stable, lower-case keys from the rulebook's names; the full lists are in [`vocab
   `gandalf-the-white`, `aragorn`, `witch-king`, `saruman`, `mouth-of-sauron`; the Ring-bearers are `ring-bearers`.
 - **Cards**: one key per card from its side, deck and number in the printed card list: `fp-char-01` … `fp-char-24`,
   `fp-strat-01` … `fp-strat-24`, `sh-char-01` … `sh-char-24`, `sh-strat-01` … `sh-strat-24`; the vocabulary file gives
-  each key's printed title. Card texts are not part of the protocol. Decks: `character`, `strategy`.
+  each key's printed title. Card texts are not part of the protocol. Decks: `character`, `strategy`. An expansion's
+  cards have the expansion's key first (`lome-fp-char-25`, §13).
 - **Action die faces**: `CHARACTER`, `ARMY`, `MUSTER`, `ARMY_MUSTER`, `EVENT`, `WILL_OF_THE_WEST`, `EYE`.
 - **Hunt tiles** (changed in implementation: by tile, as in the vocabulary file): `eye-1` … `eye-4`, `3-1` … `3-3`,
   `2-1`, `2-2`, `1-1`, `1-2`, `2r`, `1r-1`, `1r-2`, `0r-1`, `0r-2` (r = reveal); the special tiles by their own key
@@ -269,7 +279,8 @@ Bots that keep their own state can follow the game step by step:
   - **`choice`**: every decision answered, by either side: `side`, `decision` (the kind), `o` and `option` (its fields,
     without `text`). Two choices are secret from the opponent and show only their back: the attacker's Combat card
     (`{"kind":"combat_card","hidden":true,"deck":"strategy"}`; the card shows with `combat_cards_revealed`) and a card
-    discarded face down (`{"kind":"discard","hidden":true,"deck":…}`). An option of 0.1 never needs more.
+    discarded face down (`{"kind":"discard","hidden":true,"deck":…}`). An option of 0.1 never needs more (0.2 adds a
+    third, a Companion's secret version, §13).
   - **`random_*`**: every random outcome, in the order the referee drew it, so that a bot with an engine of its own
     can replay the game with the referee's dice: `random_action_dice` (`side`, `faces`), `random_card_draw` (`side`,
     `deck`, and `card` for its own side), `random_hunt_tile` (`tile`), `random_roll` (`side` if any, `roll`: `combat`,
@@ -297,14 +308,16 @@ Bots that keep their own state can follow the game step by step:
   Hunt's damage and reveal, some cards' requirements).
 - **Referee conformance**: a set of recorded games (the seed's dice, draws and tiles plus every choice) that a referee
   must replay to the same positions and results. Each conforming referee can then run games for any pair of bots.
-  Changed in implementation, the format ([`conformance/game-*.json`](conformance/), three games of a searching bot
-  at a low budget, won by the Free Peoples (Ring), by the Shadow (Corruption) and by the Shadow (military)):
+  Changed in implementation, the format ([`conformance/game-*.json`](conformance/), three base games of a searching bot
+  at a low budget, won by the Free Peoples (Ring), by the Shadow (Corruption) and by the Shadow (military); since 0.2
+  also four games of Lords of Middle-earth, §13):
   `seed`, `bots`, `setup` (the random outcomes before the first decision, as `random_*` events seen by the side that
   drew them), `steps` (per decision: `side`, `decision`, `fingerprint`, the `o` chosen, and the step's `random`
   outcomes), `result` (`winner`, `how`, `turn`) and `final_views` (both sides' views at the end). A referee replays the
   outcomes (not the seed) and must reach every recorded decision with the same fingerprint, the same result and the
   same final views.
-- **Bot conformance**: answers every kind of §5, only with listed options, within its clock.
+- **Bot conformance**: answers every kind of §5 (and, for a bot that declares an expansion, of §13), only with listed
+  options, within its clock.
 
 ## 10. Matches
 
@@ -319,10 +332,12 @@ side. Records use the same vocabulary, so any referee can replay and check them.
    the cost of more round trips (cheap locally; about 1 ms a decision through the reference referee).
 2. **Shared randomness for fairness**: should the referee commit to the seed in advance (a hash in `new_game`,
    revealed in `game_over`), so both authors can verify the dice?
-3. **Expansions** (Lords, Kings, Warriors of Middle-earth): later versions; `variant` and new kinds.
+3. **Expansions** (Lords, Kings, Warriors of Middle-earth): Lords of Middle-earth and its Council of Rivendell are in
+   0.2 (§13); Kings and Warriors of Middle-earth later, the same way (a ruleset key, `variant`, new kinds).
 4. **Remote play between servers** (each author hosts their own bot): settled for 0.1 as the bot dialling the
    referee's WebSocket with a token (§2).
-5. **Human play**: the same protocol could let a person's client play through a referee; out of scope for 0.1.
+5. **Human play**: the same protocol could let a person's client play through a referee; out of scope for 0.1 and 0.2
+   (bots play people through the hosted site instead, §14).
 6. **Who hosts the reference referee** and the conformance games: the reference referee is hosted at
    `wss://wotr.behindmedia.com/referee` (§12); matches are made by members of the site. The specification, the vocabulary, the conformance games and the example clients go to a public
    repository of their own.
@@ -357,6 +372,140 @@ A referee open to the public plays **matches** made in advance, each with fixed 
   match is finished, cancelled or expired), `line_too_long`.
 - **Time limits**: a match not started within 24 hours expires; one running longer than 12 hours ends, its game in
   progress not counted (`ABORTED`).
+- **Rules**: a match between two bots plays the base game; games of Lords of Middle-earth are played against people
+  (§14), with bots that declare it (§13).
+
+## 13. Rulesets and Lords of Middle-earth (0.2)
+
+0.2 adds the expansion **Lords of Middle-earth** (Ares Games) for War of the Ring, Second Edition, with and without
+its **Council of Rivendell** variant. Everything of 0.1 is unchanged for the base game, byte for byte: a 0.1 bot keeps
+working and is only ever given base games. The expansion's rules are its rulebook's (with the published FAQ, as for the
+base game, §9); this section names only what a bot must read and answer.
+
+- **Version**: a 0.2 referee says `"protocol":"wotr-bot/0.2"` in its `hello` and accepts any `wotr-bot/0.x` bot.
+- **The bot declares its rules**: `"rulesets": ["base", "lome", "lome:council"]` in its `hello`. Keys: `base` (the
+  base game), `lome` (Lords of Middle-earth), `lome:council` (Lords of Middle-earth with the Council of Rivendell);
+  unknown keys are ignored. Absent, or none known: `["base"]`. A referee sends a bot only games of a ruleset it
+  declared; the hosted site offers a bot to people's games by it (§14). A bot that only chooses among the listed
+  options can declare every ruleset (the example bot declares none, so it plays the base game: add `"rulesets"` to its
+  `hello`); a bot with an engine of its own declares what its engine knows.
+- **`new_game`** of an expansion's game: `"rules": "base-2e"` as always, `"variant": ["lome"]` or
+  `["lome", "council"]`, and `"ruleset": "lome"` or `"lome:council"` (the canonical key). A base game's `new_game` is as
+  in 0.1 (`variant` empty, no `ruleset`).
+- **The vocabulary's additions** ([`vocabulary-0.2.json`](vocabulary/vocabulary-0.2.json), each marked
+  `"expansion": "lome"`, keys and short names only):
+  - **Cards**, keyed with the expansion first: `lome-fp-char-25` … `lome-fp-char-28`, `lome-fp-strat-25`,
+    `lome-fp-strat-26`, `lome-sh-char-25` … `lome-sh-char-28`, `lome-sh-strat-25`, `lome-sh-strat-26`;
+    `lome-sh-char-17` ("A Balrog is Come!") takes the place of `sh-char-17` ("Balrog of Moria") in the deck;
+    `lome-sh-char-00` ("We Shall Get It") is out of the decks until a rule brings it in. Cards out of the game are
+    listed in the view (`lome.out_of_game`).
+  - **Characters**: `elrond`, `galadriel`, `smeagol`, `balrog`, `gothmog`; the **versions** of a base character
+    (`version_of` in the file): `gandalf-the-grey-narya` (Gandalf the Grey, Keeper of Narya),
+    `mouth-of-sauron-black-numenorean`, `witch-king-chief`, and with the Council `strider-dunadan`,
+    `boromir-captain-general`, `legolas-elven-prince`, `gimli-dwarven-lord`, `meriadoc-hobbit-of-the-shire`,
+    `peregrin-hobbit-of-the-shire`.
+  - **Special dice** (field `special_die`): `vilya`, `nenya`, `narya` (Free Peoples), `balrog`, `gothmog` (Shadow),
+    each with its owner and its six faces in order (`remove` marks a face with the Remove star). The faces they add:
+    `CARD_DRAW`, `USE_BALROG`.
+  - **Elven Rings** (field `ring`): `vilya`, `nenya`, `narya`.
+  - **Hunt tiles**: `smeagol-1` … `smeagol-4`.
+  - **The Council's Action tokens** (field `token`): `move`, `advance`.
+  - **Abilities** that ask as a card does: `he-sees-he-knows` (the Witch-king, Chief of the Ringwraiths).
+- **Decision kinds** added (after the 26 of §5; in an expansion's game only):
+
+| Kind | The question | Options (`kind` and fields) |
+|---|---|---|
+| `SPECIAL_DIE` | keep one of the special dice just rolled | `keep_special_die` + `special_die`, `face` |
+| `KEEPER_RING` | use a Keeper's Ring now, or not (Vilya after an action, Nenya on an Eye tile) | `keeper_ring` + `ring`, `use` (true/false) |
+| `SETUP_VERSION` | before the game, in secret: which version of a Companion plays (Gandalf the Grey or the Keeper of Narya; with the Council each Companion's) | `version` + `character` |
+| `SETUP_GUIDE` | the initial Guide | `starting_guide` + `character` |
+| `COUNCIL` | the Council of Rivendell: a Companion starting outside the Fellowship, or the end of that; an Action token; where a Companion who disappeared reappears | `start_outside` + `character`, `region`; `end`; `take_token` + `token`; `disappear_to` + `character`, `region` |
+
+- **Options** added to the base kinds:
+  - `ACTION`: `use_token` + `token` and the die action's fields (a Council Action token used as a die).
+  - `EXTEND_SIEGE`: `evil_knowledge`.
+  - `use_die` / `skip_die` of the kept special die carry `special_die` (its key; its `die` index comes after the
+    standard dice).
+  - `elven_ring` and the `force_discard` action carry `ring` (which Ring).
+  - Die actions (`use_die`'s `action`): `use_narya` + `nation`; `play_keeper` + `character`, `region`;
+    `activate_balrog`; `move_balrog` + `region`; `move_army_with_balrog`; `attack_with_balrog`; `deactivate_balrog`
+    + `by_gandalf`; `gothmog_recruit` + `upgrade`; `great_sorcery` + `attack`; `guide_force_discard` + `card`.
+    Minions enter play with their own keys (`play_minion` + `character`, e.g. `witch-king-chief`).
+  - `CARD_CHOICE` (and its `context`) of an ability that asks as a card does has `ability` (its key) in place of
+    `card`.
+- **Secret choices**: `SETUP_VERSION` is secret like a face-down card. The opponent's `choice` event shows only
+  `{"kind":"version","hidden":true,"character":BASE}` (which Companion, never which version), and its view shows the
+  base character's key wherever that Companion is (the Guide included), listed in `lome.hidden_versions`. The version
+  is revealed as the game shows it (when it becomes the Guide, leaves the Fellowship, or a card reveals it): a
+  `version_revealed` event, and the true key from then on (listed in `lome.revealed_versions`).
+- **Events** added: `random_special_die` (`special_die`, `face_index` 0–5 in the order of the die's faces in the
+  vocabulary file, `face`, and `remove` when that face has the Remove star) among the random outcomes, after the
+  standard dice of the same roll; board events in the same snake_case form, e.g. `special_die_rolled`,
+  `special_die_kept`, `version_revealed`, `started_outside`, `action_token_taken`.
+- **The view** gains, in an expansion's game only, `"lome"`: `ruleset`; `special_dice` (each `special_die`, `side`,
+  `owner`, `status` (`not_in_pool`, `unrolled`, `rolled`, `available`, `set_aside`, `used`, `hunt_box`, `removed`),
+  `face`, and `remove` on a rolled Remove star); `kept_special_die` per side; `elven_ring_owners` per Ring
+  (`FREE_PEOPLES`, `SHADOW`, `OUT_OF_GAME`); `balrog_active`; `nenya_offered` and `we_shall_get_it_offered` (a tile,
+  while it is offered); `revealed_versions` and `hidden_versions`; `out_of_game`, the cards out of the game per side;
+  and with the Council `council` (`action_tokens`: `move` and `advance`, each `held` and `used`;
+  `token_used_this_turn`; `fellowship_box_die`; `disappeared`). Example (the end of a Council game):
+
+```
+"lome":{"ruleset":"lome:council",
+        "special_dice":[{"special_die":"vilya","side":"FREE_PEOPLES","owner":"elrond","status":"removed","face":null},
+                        {"special_die":"narya","side":"FREE_PEOPLES","owner":"gandalf-the-grey-narya","status":"not_in_pool","face":null}, …],
+        "kept_special_die":{"FREE_PEOPLES":null,"SHADOW":null},
+        "elven_ring_owners":{"vilya":"OUT_OF_GAME","nenya":"SHADOW","narya":"OUT_OF_GAME"},"balrog_active":false,
+        "revealed_versions":["gandalf-the-grey","boromir",…],"hidden_versions":[],
+        "out_of_game":{"FREE_PEOPLES":[],"SHADOW":["sh-char-17","lome-sh-char-00"]},
+        "council":{"action_tokens":{"move":{"held":false,"used":false},"advance":{"held":false,"used":false}},
+                   "token_used_this_turn":false,"fellowship_box_die":null,"disappeared":{}}}
+```
+
+- **Conformance**: an expansion's conformance game has `variant` and `ruleset` at its top and replays as the base
+  game's do (§9): [`conformance/game-201.json`](conformance/game-201.json) and
+  [`game-202.json`](conformance/game-202.json) are Lords of Middle-earth (won by the Free Peoples (Ring) and by the
+  Shadow (Corruption)), [`game-301.json`](conformance/game-301.json) and [`game-302.json`](conformance/game-302.json)
+  Lords of Middle-earth with the Council of Rivendell (won by the Shadow (Corruption) and by the Free Peoples (Ring)).
+  The three base games are unchanged.
+- **What a bot that declares `lome` must handle**: the five kinds above (option 0 is always legal), the new options'
+  fields where it reads them, the `lome` part of the view, and, if it follows the events, `random_special_die` and a
+  hidden `version` choice. A bot that keeps its own copy of the game stands in for an opponent's hidden version with
+  the base character until the game names it.
+
+## 14. Online play
+
+The hosted referee also seats bots in games against people on the site (wotr.behindmedia.com; README, "Play people on
+the site"). The protocol is the same, with these additions; a bot that ignores them still plays, as long as it answers
+within its game's time.
+
+- **Connection**: a bot key (`wotr_bot_…`) instead of a seat token. One game at a time per connection; between games
+  the connection waits, and the next `new_game` may come at any time. No `quit`.
+- **The rules it plays** (0.2, §13): `rulesets` in the bot's `hello`, absent meaning the base game. People's
+  challenges and quick match give a bot only games of the rules it declared.
+- **`seek`** (optional, in the bot's `hello`): which games it takes.
+  `{"real_time": {"min_base_s": 300, "max_base_s": 7200, "max_increment_s": 60}, "correspondence": {"max_days": 7}}`;
+  `"real_time": false` for none; without `correspondence`, none. Default: real time from 5 minutes to 2 hours, an
+  increment up to 60 seconds, no correspondence. Rated and side are not the bot's to choose: games against bots are
+  never rated, and a bot plays either side.
+- **The game clock** (§4's `game` clock): `new_game`'s `clock` is
+  `{"kind": "game", "ms": 900000, "increment_ms": 10000}` or `{"kind": "correspondence", "days_per_move": 3}`; each
+  `decide`'s `clock` is `{"left_ms": …, "opponent_ms": …, "increment_ms": …}` (your time left in the whole game) or
+  `{"deadline": <ms since 1970>, "left_ms": …}`. A side earns the increment each time the decision passes to the other
+  side. There is no time per decision and no `timeout` notice: a bot out of time loses the game. Read `kind` before
+  `left_ms`.
+- **Game ids** are the site's (letters, digits, `-`, `_`); `seed_bot` is never derived from the game's seed.
+- **Coming back**: in a real-time game a bot whose connection drops has 2 minutes to connect again (its clock runs);
+  its next connection gets `new_game` for the same game, every event of its side from the start (`seq` from 1 again),
+  and the decision waiting. Later than that, it loses the game. In correspondence the game waits.
+- **`game_over`**: `how` is a victory, `FORFEIT` with `detail` (`resigned` or `time`; `winner` says who), or `ABORTED`
+  (no winner: the game ended before both sides moved, or the site took it away).
+- **What it sees**: its side's view and events only. No chat reaches the bot, and the bot sends none: its greeting is
+  set on its page and sent once when a game starts.
+- **Limits** as the hosted referee's (§12); an illegal answer is asked once more; two illegal answers to one decision,
+  or a broken limit, resign the game.
+- **Refusals**: `unavailable`, `unauthorized` (also "waits for the admin's approval", "was suspended"), `rate_limited`,
+  `busy` (as many connections as the bot may have).
 
 ## Connecting your bot
 
@@ -364,7 +513,9 @@ A referee open to the public plays **matches** made in advance, each with fixed 
    `hello`, answers `new_game` with `ready`, and answers each `decide` with a random option. Replace the choice with
    your bot's.
 2. Run it against a referee locally over stdin/stdout, or dial the hosted referee
-   `wss://wotr.behindmedia.com/referee` with a match's seat token (README, "Play on the hosted referee"):
-   `python3 random_bot.py --connect wss://wotr.behindmedia.com/referee --token wotr_seat_…`.
+   `wss://wotr.behindmedia.com/referee` with a match's seat token (README, "A hosted referee"):
+   `python3 random_bot.py --connect wss://wotr.behindmedia.com/referee --token wotr_seat_…`. To play people, connect
+   with a bot key instead (§14; README, "Play people on the site"); to play Lords of Middle-earth, declare it in the
+   `hello`'s `rulesets` (§13).
 3. Check your bot against the conformance games in [`conformance/`](conformance/): every decision there lists its
    options and the choice made, so a bot can be replayed through them.
