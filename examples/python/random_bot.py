@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A minimal bot for the WotR Bot Protocol (draft 0.1): it answers every decision with a random legal option.
+"""A minimal bot for the WotR Bot Protocol (draft 0.2): it answers every decision with a random legal option.
 
 A template for other authors: Python 3.8+, the standard library only, no other file needed.
 
@@ -13,11 +13,14 @@ Two ways to connect:
       python3 random_bot.py --connect "ws://localhost:8765/referee?token=YOUR-TOKEN"
 
 Options: --seed S (this bot's own generator; otherwise each game's seed_bot), --name NAME, --events (ask for the event
-stream, printed to stderr with --verbose).
+stream, printed to stderr with --verbose), --rulesets base,lome,lome:council (the rules it declares; default all three).
 
 Every message is one JSON object; the referee asks, the bot answers with the same "id". The bot never needs the
 rules: each "decide" carries the view of the position and the closed list of options, and the answer is an option's
-"o". Option 0 is always legal. See SPEC.md for the messages and vocabulary/ for the names.
+"o". Option 0 is always legal. That holds for the expansion Lords of Middle-earth as well (protocol 0.2): its
+decision kinds (SPECIAL_DIE, KEEPER_RING, SETUP_VERSION, SETUP_GUIDE, COUNCIL) and option fields arrive the same way,
+so a bot that only chooses among the listed options can play every ruleset.
+See SPEC.md for the messages and vocabulary/ for the names.
 """
 
 import argparse
@@ -31,7 +34,13 @@ import struct
 import sys
 from urllib.parse import urlparse
 
-PROTOCOL = "wotr-bot/0.1"
+PROTOCOL = "wotr-bot/0.2"
+
+# The rules this bot plays, declared in its hello (protocol 0.2): "base" (the base game), "lome" (Lords of
+# Middle-earth), "lome:council" (with the Council of Rivendell). A referee sends a bot only games of a ruleset it
+# declared; a bot may declare fewer (a bot with an engine of its own declares what its engine knows). Without
+# "rulesets" a bot plays the base game only.
+RULESETS = ["base", "lome", "lome:council"]
 
 
 def log(*args):
@@ -41,8 +50,9 @@ def log(*args):
 class Bot:
     """The bot's logic: everything a bot author would replace is in decide()."""
 
-    def __init__(self, name, seed=None, events=False, verbose=False, token=None):
+    def __init__(self, name, seed=None, events=False, verbose=False, token=None, rulesets=None):
         self.name = name
+        self.rulesets = list(RULESETS if rulesets is None else rulesets)
         self.fixed_seed = seed
         self.events = events
         self.verbose = verbose
@@ -56,13 +66,16 @@ class Bot:
         kind = message.get("type")
         if kind == "hello":
             answer = {"type": "hello", "id": message.get("id"), "protocol": PROTOCOL, "name": self.name,
-                      "version": "1.0", "author": "example", "events": self.events, "options": []}
+                      "version": "0.2", "author": "example", "events": self.events, "options": [],
+                      "rulesets": self.rulesets}
             if self.token:
                 answer["token"] = self.token
             return answer
         if kind == "new_game":
             self.side = message.get("side")
-            log("game", self.score["games"] + 1, "started:", message.get("game"), "as", self.side)
+            # An expansion's game names its rules: "ruleset" ("lome" or "lome:council") and "variant"; a base game has none.
+            log("game", self.score["games"] + 1, "started:", message.get("game"), "as", self.side,
+                "(" + message.get("ruleset", "base") + ")")
             if self.fixed_seed is None:
                 self.rng = random.Random(message.get("seed_bot"))
             return {"type": "ready", "id": message.get("id")}
@@ -92,7 +105,10 @@ class Bot:
     def decide(self, message):
         decision = message["decision"]
         options = decision["options"]
-        # A real bot reads message["view"] (the position as this side knows it) and the options' fields here.
+        # A real bot reads message["view"] (the position as this side knows it) and the options' fields here. In a game
+        # of Lords of Middle-earth the view also has a "lome" part (the special dice, the Elven Rings, the versions of
+        # characters, with the Council its Action tokens); a Companion's version chosen in secret (SETUP_VERSION) is
+        # shown to the opponent as the base Companion until the game reveals it.
         choice = self.rng.choice(options)
         if self.verbose:
             log("decide", decision.get("kind"), "->", choice.get("text") or choice.get("kind"), "of", len(options))
@@ -224,15 +240,18 @@ def run_websocket(bot, url):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="A random bot for the WotR Bot Protocol (draft 0.1).")
+    parser = argparse.ArgumentParser(description="A random bot for the WotR Bot Protocol (draft 0.2).")
     parser.add_argument("--connect", help="a referee's WebSocket URL (ws:// or wss://); default: stdin and stdout")
     parser.add_argument("--token", help="the token for a remote referee (also possible as ?token= in the URL)")
     parser.add_argument("--seed", type=int, help="this bot's own seed (default: each game's seed_bot)")
     parser.add_argument("--name", default="random-example")
     parser.add_argument("--events", action="store_true", help="ask for the event stream")
+    parser.add_argument("--rulesets", default=",".join(RULESETS),
+                        help="the rulesets it declares, comma-separated (default: %(default)s)")
     parser.add_argument("--verbose", action="store_true", help="print each decision and the events to stderr (asks for events)")
     args = parser.parse_args()
-    bot = Bot(args.name, args.seed, args.events or args.verbose, args.verbose, args.token)
+    rulesets = [r.strip() for r in args.rulesets.split(",") if r.strip()]
+    bot = Bot(args.name, args.seed, args.events or args.verbose, args.verbose, args.token, rulesets)
     if args.connect:
         run_websocket(bot, args.connect)
     else:

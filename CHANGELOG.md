@@ -24,6 +24,8 @@ in its `hello` (every 0.1 bot) plays the base game and is never given another; a
   the three base games are unchanged.
 - Online play against people on the hosted site (SPEC.md §14, in use since 2026-10-22): bot keys, `seek`, the `game`
   and `correspondence` clocks, coming back after a drop; bots are offered games of the rules they declare.
+- The example bot (`examples/python/random_bot.py`) speaks 0.2: it declares `"rulesets": ["base", "lome",
+  "lome:council"]` (fewer with `--rulesets`), logs each game's ruleset and says version `0.2`.
 
 ## 0.1 (2026-10-21)
 

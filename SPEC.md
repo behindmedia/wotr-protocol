@@ -387,8 +387,8 @@ base game, §9); this section names only what a bot must read and answer.
   base game), `lome` (Lords of Middle-earth), `lome:council` (Lords of Middle-earth with the Council of Rivendell);
   unknown keys are ignored. Absent, or none known: `["base"]`. A referee sends a bot only games of a ruleset it
   declared; the hosted site offers a bot to people's games by it (§14). A bot that only chooses among the listed
-  options can declare every ruleset (the example bot declares none, so it plays the base game: add `"rulesets"` to its
-  `hello`); a bot with an engine of its own declares what its engine knows.
+  options can declare every ruleset (the example bot declares all three; `--rulesets base` makes it declare fewer); a
+  bot with an engine of its own declares what its engine knows.
 - **`new_game`** of an expansion's game: `"rules": "base-2e"` as always, `"variant": ["lome"]` or
   `["lome", "council"]`, and `"ruleset": "lome"` or `"lome:council"` (the canonical key). A base game's `new_game` is as
   in 0.1 (`variant` empty, no `ruleset`).
