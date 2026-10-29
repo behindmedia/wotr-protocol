@@ -416,7 +416,7 @@ base game, §9); this section names only what a bot must read and answer.
 | Kind | The question | Options (`kind` and fields) |
 |---|---|---|
 | `SPECIAL_DIE` | keep one of the special dice just rolled | `keep_special_die` + `special_die`, `face` |
-| `KEEPER_RING` | use a Keeper's Ring now, or not (Vilya after an action, Nenya on an Eye tile) | `keeper_ring` + `ring`, `use` (true/false) |
+| `KEEPER_RING` | use a Keeper's Ring now, or not (Vilya after an action, Nenya on an Eye tile) | `keeper_ring` + `ring`, `use` (true/false); optional `face` when Vilya keeps a Will of the West that was changed into another result: one option per result it may be kept as (e.g. `EVENT` and `CHARACTER` after a Character card) |
 | `SETUP_VERSION` | before the game, in secret: which version of a Companion plays (Gandalf the Grey or the Keeper of Narya; with the Council each Companion's) | `version` + `character` |
 | `SETUP_GUIDE` | the initial Guide | `starting_guide` + `character` |
 | `COUNCIL` | the Council of Rivendell: a Companion starting outside the Fellowship, or the end of that; an Action token; where a Companion who disappeared reappears | `start_outside` + `character`, `region`; `end`; `take_token` + `token`; `disappear_to` + `character`, `region` |

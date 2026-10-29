@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2, 2026-10-29: Vilya and a changed Will of the West
+
+An added field, so 0.2 stays: a `KEEPER_RING` option for Vilya on a Will of the West die that was changed into another
+result (as the War of the Ring Almanac, Expansions, rules) carries `face`, one option per result it may be kept as
+(e.g. `EVENT` and `CHARACTER` after a Character card). Every other Keeper Ring option is unchanged. Conformance
+game-301's decision fingerprint at step 51 follows.
+
 ## 0.2 (2026-10-24)
 
 Rulesets and the expansion Lords of Middle-earth, with and without its Council of Rivendell (SPEC.md §13).
