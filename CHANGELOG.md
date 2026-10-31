@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2, 2026-10-31: no Event card without an effect
+
+The protocol is unchanged. The referee no longer offers to play an Event card that would change nothing, also when
+playing it would draw a card (Gandalf the Grey as the Guide, the Palantír). The conformance games follow: `game-101`,
+`game-102` and `game-201` keep their choices with new option numbers and fingerprints, `game-103`, `game-202` and
+`game-302` are recorded anew from the same seeds (`game-103` now a Ring win, `game-202` ends at the turn cap).
+
 ## 0.2, 2026-10-29: Vilya and a changed Will of the West
 
 An added field, so 0.2 stays: a `KEEPER_RING` option for Vilya on a Will of the West die that was changed into another

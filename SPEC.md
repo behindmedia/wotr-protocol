@@ -309,7 +309,7 @@ Bots that keep their own state can follow the game step by step:
 - **Referee conformance**: a set of recorded games (the seed's dice, draws and tiles plus every choice) that a referee
   must replay to the same positions and results. Each conforming referee can then run games for any pair of bots.
   Changed in implementation, the format ([`conformance/game-*.json`](conformance/), three base games of a searching bot
-  at a low budget, won by the Free Peoples (Ring), by the Shadow (Corruption) and by the Shadow (military); since 0.2
+  at a low budget, won by the Free Peoples (Ring), by the Shadow (Corruption) and by the Free Peoples (Ring); since 0.2
   also four games of Lords of Middle-earth, §13):
   `seed`, `bots`, `setup` (the random outcomes before the first decision, as `random_*` events seen by the side that
   drew them), `steps` (per decision: `side`, `decision`, `fingerprint`, the `o` chosen, and the step's `random`
@@ -464,10 +464,9 @@ base game, §9); this section names only what a bot must read and answer.
 
 - **Conformance**: an expansion's conformance game has `variant` and `ruleset` at its top and replays as the base
   game's do (§9): [`conformance/game-201.json`](conformance/game-201.json) and
-  [`game-202.json`](conformance/game-202.json) are Lords of Middle-earth (won by the Free Peoples (Ring) and by the
-  Shadow (Corruption)), [`game-301.json`](conformance/game-301.json) and [`game-302.json`](conformance/game-302.json)
+  [`game-202.json`](conformance/game-202.json) are Lords of Middle-earth (won by the Free Peoples (Ring), and ended
+  at the turn cap), [`game-301.json`](conformance/game-301.json) and [`game-302.json`](conformance/game-302.json)
   Lords of Middle-earth with the Council of Rivendell (won by the Shadow (Corruption) and by the Free Peoples (Ring)).
-  The three base games are unchanged.
 - **What a bot that declares `lome` must handle**: the five kinds above (option 0 is always legal), the new options'
   fields where it reads them, the `lome` part of the view, and, if it follows the events, `random_special_die` and a
   hidden `version` choice. A bot that keeps its own copy of the game stands in for an opponent's hidden version with

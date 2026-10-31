@@ -16,7 +16,7 @@ of Middle-earth** (with and without its Council of Rivendell).
   standard library only), over stdin/stdout or a WebSocket: the template to start from. It speaks 0.2 and declares
   every ruleset (the base game, Lords of Middle-earth, with the Council of Rivendell).
 - **[conformance/](conformance/)**: recorded games with every random outcome, option fingerprint and choice, for
-  checking a referee or a bot: three of the base game (Ring, Corruption and military wins, `game-101` to `game-103`),
+  checking a referee or a bot: three of the base game (`game-101` to `game-103`),
   two of Lords of Middle-earth (`game-201`, `game-202`) and two with the Council of Rivendell (`game-301`,
   `game-302`).
 
