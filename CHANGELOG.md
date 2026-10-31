@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2, 2026-10-31: the price of forcing a card off is discarded face down
+
+The two cards the Shadow pays to force "A Power too Great" or "The Power of Tom Bombadil" off the table are discarded
+face down, as the rules' discards from the hand are: the Free Peoples' `choice` event shows that `use_die` option
+without `pay` and `o`, with `"hidden":true`, and `die_used` has no `pay` for them (SPEC §8). A bot that reads `pay`
+from the opponent's choice must expect it to be absent. The referee also no longer asks which Companion forfeits his
+Leadership to "Mighty Attack" (the lowest one goes), and no longer offers "Daring Defiance" under "The White Rider".
+`politics_advanced` may carry `"back":true` (a step away from war, "Stormcrow").
+Conformance games 201, 202 and 301: their `final_views` follow (the paid cards are face down); every choice and
+fingerprint is unchanged.
+
 ## 0.2, 2026-10-31: no Event card without an effect
 
 The protocol is unchanged. The referee no longer offers to play an Event card that would change nothing, also when

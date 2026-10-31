@@ -168,7 +168,7 @@ five kinds and some options for Lords of Middle-earth (§13); a base game asks o
   `hide_fellowship_strider` (any result, Strider as Guide); `play_companion` / `play_minion` + `character`, `region`;
   `companion_politics` + `character` (Boromir, Legolas, Gimli); `voice_of_saruman` + `upgrade`; `play_card` + `card`,
   `as` (the die result it is played with); `force_discard` + `card` (the opponent's table card), `any_die`,
-  `elven_ring` (true: giving up an Elven Ring as well), `pay` (cards discarded from the hand as the price). The
+  `elven_ring` (true: giving up an Elven Ring as well), `pay` (cards discarded face down from the hand as the price). The
   draft's `character`, `nation`, `region` are these actions' fields. An Elven Ring is its own option: `elven_ring` +
   `die`, `from`, `to` (the die's new face; the same player then acts).
 - **`CHOOSE_ATTACK`**: `all` (false: a rearguard is chosen next) instead of `with_leader`, which is the `ACTION`'s
@@ -280,7 +280,11 @@ Bots that keep their own state can follow the game step by step:
     without `text`). Two choices are secret from the opponent and show only their back: the attacker's Combat card
     (`{"kind":"combat_card","hidden":true,"deck":"strategy"}`; the card shows with `combat_cards_revealed`) and a card
     discarded face down (`{"kind":"discard","hidden":true,"deck":…}`). An option of 0.1 never needs more (0.2 adds a
-    third, a Companion's secret version, §13).
+    third, a Companion's secret version, §13). The two cards the Shadow pays to force "A Power too Great" or "The
+    Power of Tom Bombadil" off the table are discarded face down too (since 2026-10-31): the Free Peoples get that
+    `use_die` option without its `pay` and without `o`, with `"hidden":true`
+    (`{"kind":"use_die","die":…,"face":…,"action":"force_discard","card":…,"any_die":true,"hidden":true}`), its
+    `die_used` event without `pay`, and two `card_discarded` events with `face_down` and the deck only.
   - **`random_*`**: every random outcome, in the order the referee drew it, so that a bot with an engine of its own
     can replay the game with the referee's dice: `random_action_dice` (`side`, `faces`), `random_card_draw` (`side`,
     `deck`, and `card` for its own side), `random_hunt_tile` (`tile`), `random_roll` (`side` if any, `roll`: `combat`,
