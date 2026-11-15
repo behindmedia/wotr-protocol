@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2, 2026-11-15: an Elven Ring on a Will of the West, and Fire and Shadow past the Balrog
+
+The protocol is unchanged. The referee follows two rules corrections. An Elven Ring may turn a Will of the West die
+into another result while "The Day Without Dawn" may still come (that card discards unused Will of the West dice), so
+`elven_ring` options with `"from":"WILL_OF_THE_WEST"` are offered again in those games. In Lords of Middle-earth, a
+reveal whose way must pass the Balrog in Moria draws the Balrog's tile ("Fire and Shadow") as well as Moria's,
+unless "Balrog of Moria" is on the table to make the way through Moria a choice. The conformance games follow:
+`game-101`, `game-102`, `game-201` and `game-301` keep their choices with new option numbers and fingerprints
+(each earlier fingerprint is the new options without the Ring's Will of the West changes), `game-103` and `game-302`
+are recorded anew from the same seeds (both won by the Free Peoples (Ring), in turns 20 and 24); `game-202` is
+unchanged.
+
 ## 0.2, 2026-10-31: the price of forcing a card off is discarded face down
 
 The two cards the Shadow pays to force "A Power too Great" or "The Power of Tom Bombadil" off the table are discarded
