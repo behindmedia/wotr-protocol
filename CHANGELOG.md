@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2, 2026-11-17: Worn with Sorrow and Toil's discard face down
+
+The protocol is unchanged. The card the Free Peoples discard from their hand to "Worn with Sorrow and Toil" is
+discarded face down, as the rules' discards from the hand are: it no longer shows in the public `discards` of either
+view, but in `discarded_face_down` (and the opponent's `opponent_discarded_face_down` count). Conformance game 302:
+its `final_views` follow (two such cards move); every choice and fingerprint is unchanged. The other six games are
+unchanged.
+
 ## 0.2, 2026-11-15: an Elven Ring on a Will of the West, and Fire and Shadow past the Balrog
 
 The protocol is unchanged. The referee follows two rules corrections. An Elven Ring may turn a Will of the West die
