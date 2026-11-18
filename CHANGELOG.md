@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2, 2026-11-18: game logs
+
+The protocol is unchanged. §10 now defines the **protocol log** a referee keeps of each game ("Game logs"): JSON
+Lines, one message a line with `t`, `side`, `dir` and the message as sent in `line`; a one-seat log; a zip of several
+games with `games.json`. This is the format referees already wrote (matches, hosted bots' games); it is now the
+standard for downloads of matches' and tournaments' games.
+
 ## 0.2, 2026-11-17: Worn with Sorrow and Toil's discard face down
 
 The protocol is unchanged. The card the Free Peoples discard from their hand to "Worn with Sorrow and Toil" is

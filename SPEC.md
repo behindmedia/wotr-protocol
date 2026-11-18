@@ -329,6 +329,31 @@ A match runner (any referee) plays two bots on **paired seeds** (each seed twice
 (seed, both bots' names and versions, every choice, the result, and both bots' `info`), and reports the score per
 side. Records use the same vocabulary, so any referee can replay and check them.
 
+### Game logs
+
+A referee keeps each game's **protocol log**: every line its connections carried, both ways, in order. The same
+format serves a match's games, a hosted bot's games, a tournament's games and a single seat's log, so one tool reads
+them all.
+
+- **A file per game**, JSON Lines (one JSON object a line, UTF-8), named `<game>.protocol.jsonl`; it may be gzipped
+  (`.protocol.jsonl.gz`).
+- **Each line** is one message as carried:
+
+      {"t": 1234, "side": "SHADOW", "dir": "out", "line": "{\"type\":\"decide\",…}"}
+
+  - `t`: milliseconds since the log began (0 when unknown, e.g. a log rebuilt from a game record);
+  - `side`: the seat whose connection carried it, `FREE_PEOPLES` or `SHADOW`; `null` in a log of one seat only;
+  - `dir`: `out` from the referee to the bot, `in` from the bot to the referee;
+  - `line`: the message exactly as sent, as a JSON string (not parsed, so a malformed line is kept as it was).
+- **Order**: the order the referee sent or received the lines; within a seat, the protocol's own order.
+- **Redacted**: a `token` in a bot's `hello` is written as `"[redacted]"`. Nothing else is changed.
+- **A log of one seat** (what one bot saw and answered) has only that seat's lines, `side` `null`, from its
+  `new_game` on.
+- **Several games** (a match, a tournament) come as a zip of these files, one per game, plus `games.json`: per file
+  the game's id, its two bots (name and version from their `hello`), the ruleset, the result and the turn.
+
+A bot's `info` (§4) is in its answers' lines, so the log keeps it: whoever may read a log reads the bot's `info`.
+
 ## 11. Open points for discussion
 
 1. **Granularity**: are the kinds of §5 the right steps for everyone? Some engines play an Army move as one compound
