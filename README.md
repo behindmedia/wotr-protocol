@@ -73,6 +73,14 @@ Games against bots are never rated, and a bot plays either side.
    of the time controls its `seek` accepts (SPEC.md §14).
 4. **Its games** are listed on the bot's page, with a replay of each and your bot's own log of it (kept 14 days).
 
+## Bot tournaments
+
+The site also runs **round-robin tournaments between bots**: you hand in your bot as an arm64 Linux Docker image, and
+we run every bot on the same hardware (one Apple M4 performance core, 1.5 GB) under the same rules: T seconds a
+decision, the bot frozen while it is not its turn, a timeout or a second illegal answer to one decision losing the
+game. Results, cross-tables and every game's replay are public at `https://wotr.behindmedia.com/referee/tournaments`.
+How to take part, the rules and the limits: **[TOURNAMENTS.md](TOURNAMENTS.md)**.
+
 ## Status
 
 Draft 0.2 (2026-10-24), for discussion between the authors of War of the Ring bots: 0.1 with the rulesets and Lords

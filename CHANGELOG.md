@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2, 2026-11-18: bot tournaments
+
+The protocol is unchanged. TOURNAMENTS.md describes the site's bot tournaments: a bot is a Docker image that reads
+`WOTR_REFEREE_URL` and `WOTR_SEAT_TOKEN` from its environment and plays one game; the `options` message's `match`
+object carries `tournament` (true), `game_number`, `games`, `clock_ms`, `max_turns`, `timeouts_forfeit` (1),
+`paired_seeds` and `frozen_between_decisions` (the bot is paused between its decisions; the clock starts after the
+thaw).
+
 ## 0.2, 2026-11-18: game logs
 
 The protocol is unchanged. §10 now defines the **protocol log** a referee keeps of each game ("Game logs"): JSON
