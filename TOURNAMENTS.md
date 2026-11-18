@@ -32,7 +32,7 @@ same limits, and publish the results. This page tells you what you need to take 
   `game_over`) wait in its connection and arrive when it is thawed. **The clock starts only after the thaw**, so a
   frozen bot loses no time. A frozen bot is never pinged and never counted as disconnected.
 - **Tip:** start your own timer when the `decide` arrives and answer with your best move so far shortly before the
-  deadline. Our own bot keeps back a fixed 200 ms, which is ample on these machines (the answer travels over a local
+  deadline. Our own bot keeps back a fixed 300 ms (about 120 ms of it the machine's own delays: the thaw, the relay, the other games; the answer travels over a local
   connection). Answer forced decisions (one option) at once. Don't rely on wall-clock time passing between your own
   decisions: the freeze stops it for you.
 
@@ -139,12 +139,20 @@ You can hand in a new version, or withdraw the bot, until its event starts. At m
 Public at **wotr.behindmedia.com/referee/tournaments** (and as JSON at `/referee/api/tournaments/{id}`):
 
 - the standings, the cross-table, each bot's record as the Free Peoples and as the Shadow;
+- each bot's **Elo** (fitted over all the event's games, the bots averaging 1500, with its 95% interval; display only,
+  the ranking is by points) and a chart of how it moved during the event;
 - **how each bot's games ended**: won on the board, won by the opponent's forfeit, drawn, lost on the board, lost by
   timeout, illegal answers, failing to connect, or a crash;
 - per bot: decisions, thinking time per decision, its longest answers against the clock, CPU use while deciding and
   while frozen, slow decisions;
-- every game's record and replay, once **both games of its deal** are over (the second game uses the same seed);
+- every game's record, replay and **protocol log** (every message both ways, in the
+  [SPEC's "Game logs"](SPEC.md) format; also one seat's log), once **both games of its deal** are over (the second game
+  uses the same seed); **Download all** gives every game shown as one zip: records, protocol logs and `games.json`;
 - the seeds, once the event is over.
+
+What your bot sends in `info` is in its answers, so it is in the public protocol log. What your bot writes to its own
+output (stdout and stderr, the last 256 KB of each game) is **not public**: you see it on your registration's page on
+the site (per game, or all of an event's as a zip), and so does the organiser.
 
 ## Testing your bot before you register
 
