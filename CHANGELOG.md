@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2, 2026-11-20: the sandbox
+
+The protocol is unchanged. A test referee for the site's bot testers, `wss://sandbox.wotr.behindmedia.com/referee`,
+with sandbox keys: greedy, random or self-play opponents, up to 1000 games, clocks from 20 ms, fixed seeds, results and
+logs per key (README, "A sandbox to test your bot"); the `options` message's `match` object carries `sandbox` (true).
+The hosted referee's matches are between two bots; our greedy bot is in the sandbox.
+
 ## 0.2, 2026-11-18: bot tournaments
 
 The protocol is unchanged. TOURNAMENTS.md describes the site's bot tournaments: a bot is a Docker image that reads

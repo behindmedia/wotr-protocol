@@ -28,8 +28,8 @@ from wherever it runs (your machine, your server) and the referee holds the rule
 1. **Get a match.** A member of wotr.behindmedia.com (the site is invite-only; ask the person who sent you here, or
    request an invite on the site) creates a match on `https://wotr.behindmedia.com/referee` and chooses its rules:
    the number of games (1 to 10), the turn cap (10 to 60, or none), the clock per decision (1 to 60 seconds), what a
-   timeout costs (option 0 is played, or the N-th timeout in a game forfeits it), fresh or paired seeds, and whether
-   seat B is a second bot or the site's greedy bot (a simple one-step bot, to test yours against). The match gets
+   timeout costs (option 0 is played, or the N-th timeout in a game forfeits it), fresh or paired seeds; the other
+   seat is a second bot (to test yours against our greedy bot, use the sandbox below). The match gets
    **two seat tokens**, one per bot, shown once. Members can also create matches from a script with an API key
    (`POST https://wotr.behindmedia.com/referee/api/matches`, `Authorization: Bearer <key>`; the key is made on the
    site).
@@ -48,6 +48,53 @@ from wherever it runs (your machine, your server) and the referee holds the rule
 
 Limits: one connection per seat; messages of at most 16 KiB; at most 8 `get_view` per decision; a bot that floods
 the referee with messages nobody asked for is disconnected. Matches between two bots play the base game.
+
+## A sandbox to test your bot
+
+**`wss://sandbox.wotr.behindmedia.com/referee`** is a test referee, apart from the site's real games: play as many
+games as you like, as fast as you like, against a simple bot of ours or against your own bot. Nothing played there is
+shown on the site.
+
+1. **Get a sandbox key.** Sandbox keys are for the site's bot testers: on `https://wotr.behindmedia.com/referee/keys`,
+   "Sandbox keys", make one (shown once; at most 5; revoke one there and it stops working within a minute). Not a bot
+   tester yet? Ask the person who sent you here.
+2. **Connect your bot with the key and say what you want in the address.** The key goes as
+   `Authorization: Bearer wotr_sbx_…`, as `&key=…` in the address, or as `"token"` in your `hello`. With the example
+   bot (its `--token` puts the key in the hello):
+
+   ```
+   python3 random_bot.py --connect "wss://sandbox.wotr.behindmedia.com/referee?opponent=greedy&games=20&clock_ms=500" --token wotr_sbx_…
+   ```
+
+   | Parameter | Values | Default |
+   |---|---|---|
+   | `opponent` | `greedy` (a simple one-step bot), `random` (a random legal option), `self:<name>` (two connections with the same key and name play each other) | `greedy` |
+   | `games` | 1 to 1000; a coin decides who has the Free Peoples in game 1, then the sides alternate | 1 |
+   | `rules` | a ruleset your `hello` declares: `base`, `lome`, `lome:council`, … | `base` |
+   | `seed` | game 1's seed (game n plays seed + n − 1), to play a game again exactly | random |
+   | `clock_ms` | the clock per decision, 20 to 60000 | 5000 |
+   | `timeouts_forfeit` | 0 (a timeout plays option 0) or 1 to 5 (the N-th timeout in a game forfeits it) | 0 |
+   | `max_turns` | 10 to 60 (then a draw), or `none` | `none` |
+
+   For `self:<name>`, start the first connection, then the second with the **same address**; the first waits up to 5
+   minutes for it. Your bot can play two versions of itself this way.
+3. **The games** run one after the other on your connection, then the referee says `quit`. The `match` object of
+   `options` has `"sandbox": true` and the parameters; everything else is the protocol as on the hosted referee.
+4. **Results and logs**, with the same key: `GET https://sandbox.wotr.behindmedia.com/games` lists your key's last 100
+   games, newest first (game id, seed, sides, winner, how, turns, decisions, timeouts, illegal answers, ms per answer);
+   `GET https://sandbox.wotr.behindmedia.com/logs/<game id>` downloads a game's protocol log (gzipped JSON Lines, SPEC
+   §10; kept 7 days).
+
+   ```
+   curl -H "Authorization: Bearer wotr_sbx_…" https://sandbox.wotr.behindmedia.com/games
+   curl -H "Authorization: Bearer wotr_sbx_…" -o game.jsonl.gz https://sandbox.wotr.behindmedia.com/logs/g-…
+   ```
+
+Limits, only to keep the machine responsive: no limit on games; at most 8 games at once per key (a ninth connection is
+told `busy`); messages of at most 16 KiB; 32 connections at once from one address; 10 wrong keys from an address lock it
+out for 15 minutes; a game ends after 2 hours. Errors come as `{"type":"error","code":…,"message":…}` with
+`unauthorized`, `bad_request` (a parameter, or rules your hello does not declare), `busy`, `no_partner`, `rate_limited`
+or `unavailable`.
 
 ## Play people on the site
 
