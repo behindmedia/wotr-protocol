@@ -155,10 +155,11 @@ five kinds and some options for Lords of Middle-earth (§13); a base game asks o
 | `CHOOSE_GUIDE` | the new Guide | `guide` + `character` |
 | `GUIDE_ABILITY` | use the Guide's ability (e.g. Gollum's reveal) | `use`; `skip` |
 | `HUNT_CASUALTY` | Hunt damage: the Guide, a random Companion, or Corruption | `guide`; `random`; `corruption` (use the Ring) |
-| `REVEAL_FELLOWSHIP` | where the revealed Fellowship appears | `reveal` + `region` (and `through_moria`: true where "Balrog of Moria" makes the path matter) |
+| `REVEAL_FELLOWSHIP` | where the revealed Fellowship appears | `reveal` + `region` (and `through_moria`: true where "Balrog of Moria" makes the path matter; `strongholds`: by the official rules, the Shadow Strongholds a longer path passes, each counted once; absent, the fewest, §9) |
 | `WHITE_RIDER` | Gandalf the White cancels the Nazgûl's Leadership | `use`; `skip` |
 | `DISCARD_EXCESS_CARD` | which card to discard down to six | `discard` + `card` |
 | `CARD_CHOICE` | a card's own question (targets, amounts, yes/no) | `card_choice` + `card`, `answer` and a typed field ✱; `draw` + `deck` (a bonus draw) ✱ |
+| `LEADER_REROLL` | the official rules (§9): re-roll the failed Combat dice up to the Army's Leadership, or not | `card_choice` + `answer`: `reroll`, or `skip` (with `skip: true`) |
 
 ✱ Changed in implementation:
 
@@ -166,7 +167,7 @@ five kinds and some options for Lords of Middle-earth (§13); a base game asks o
   (a Character result moving one Army with a Leader); `attack`; `attack_with_leader`; `recruit`; `diplomacy` +
   `nation`; `move_companions`; `separate_companions`; `move_minions`; `move_fellowship`; `hide_fellowship`;
   `hide_fellowship_strider` (any result, Strider as Guide); `play_companion` / `play_minion` + `character`, `region`;
-  `companion_politics` + `character` (Boromir, Legolas, Gimli); `voice_of_saruman` + `upgrade`; `play_card` + `card`,
+  `companion_politics` + `character` (Boromir, Legolas, Gimli); `voice_of_saruman` + `upgrade` (and `regions`, below); `play_card` + `card`,
   `as` (the die result it is played with); `force_discard` + `card` (the opponent's table card), `any_die`,
   `elven_ring` (true: giving up an Elven Ring as well), `pay` (cards discarded face down from the hand as the price). The
   draft's `character`, `nation`, `region` are these actions' fields. An Elven Ring is its own option: `elven_ring` +
@@ -185,7 +186,17 @@ five kinds and some options for Lords of Middle-earth (§13); a base game asks o
   typed field as well: `yes` (true/false), `skip` (true), `region`, `character`, `nation`, `count`, `deck`,
   `target_card` (a card named by the answer), `from` + `to` (an Army's move), `region` + `unit` (a figure). A bonus draw
   (Gandalf the Grey as Guide, the Palantír of Orthanc) is `CARD_CHOICE` with `draw` + `deck` options and a context
-  `{"deck": …}` (or none for either deck).
+  `{"deck": …}` (or none for either deck). **The Lidless Eye**'s options name a die: `die` (its number, as in
+  `use_die`) and its `face`, beside `answer` and `count` (the same number, kept for the bots that read it):
+  `{"o":1,"kind":"card_choice","card":"sh-char-18","answer":"3","count":3,"die":3,"face":"ARMY"}`. A bot that compares
+  options it logged before with the referee's should leave `die` and `face` out of a `card_choice`'s comparison.
+- **`LEADER_REROLL`** (the official rules, §9): asked of each side with dice to re-roll, the attacker first ("both
+  players can re-roll", rulebook p. 30). Declining never gains a hit; a bot may always answer `reroll`.
+- **`voice_of_saruman`'s `regions`** (the official rules, §9): with fewer Isengard Regulars left than free Isengard
+  Settlements under Shadow control, the Settlements that get them, keys in region order. The option without `regions`
+  recruits in the referee's region order (North Dunland, South Dunland, Orthanc) and is always offered; the others are
+  every other choice of that many Settlements:
+  `{"o":5,"kind":"use_die","die":6,"face":"MUSTER","action":"voice_of_saruman","upgrade":false,"regions":["south-dunland"]}`.
 
 A referee must not add kinds without a protocol version change (0.2 is one: §13); a bot must answer any kind it
 receives (option 0 is always a legal fallback).
@@ -284,7 +295,10 @@ Bots that keep their own state can follow the game step by step:
     Power of Tom Bombadil" off the table are discarded face down too (since 2026-10-31): the Free Peoples get that
     `use_die` option without its `pay` and without `o`, with `"hidden":true`
     (`{"kind":"use_die","die":…,"face":…,"action":"force_discard","card":…,"any_die":true,"hidden":true}`), its
-    `die_used` event without `pay`, and two `card_discarded` events with `face_down` and the deck only.
+    `die_used` event without `pay`, and two `card_discarded` events with `face_down` and the deck only. A `choice`
+    with **`"for_you": true`** is a question the referee answered itself, with no `decide` sent: every option had the
+    same effect (a recruitment card's region with no figure of its Nation left in the reinforcements, such as
+    Half-orcs and Goblin-men with every Isengard figure on the board). Follow it as any choice of your own side.
   - **`random_*`**: every random outcome, in the order the referee drew it, so that a bot with an engine of its own
     can replay the game with the referee's dice: `random_action_dice` (`side`, `faces`), `random_card_draw` (`side`,
     `deck`, and `card` for its own side), `random_hunt_tile` (`tile`), `random_roll` (`side` if any, `roll`: `combat`,
@@ -321,7 +335,31 @@ Bots that keep their own state can follow the game step by step:
   outcomes (not the seed) and must reach every recorded decision with the same fingerprint, the same result and the
   same final views.
 - **Bot conformance**: answers every kind of §5 (and, for a bot that declares an expansion, of §13), only with listed
-  options, within its clock.
+  options, within its clock. The sandbox's certification run checks it (README, "Certify your bot").
+- **The official rules, no house rules.** A referee that says `"official_rules": true` in `new_game` offers every
+  option the rulebook allows and asks every question it asks:
+  - an option that would change nothing: an Event card without effect, Mirror of Galadriel with any die, Daring
+    Defiance under The White Rider, an Elven Ring change that gains nothing. Such an option carries
+    **`"no_effect": true`** (informational; not part of the fingerprint). A bot may simply never choose one.
+  - declining a "may draw" (Gandalf the Grey's draw as Guide, the Witch-king's "Sorcerer"): a `draw` option with
+    `"skip": true` and no `deck`;
+  - every reveal path (`strongholds`, §5);
+  - where the Voice of Saruman recruits when Regulars are short (`voice_of_saruman` with `regions`, §5);
+  - the questions an engine might settle itself: Mighty Attack's Companion, the Guide after a Hunt separation, the
+    Leader re-roll (`LEADER_REROLL`).
+  - **`hidden_passes`** (with `official_rules`): whether the passes on a hidden hand are asked too (a Combat card
+    question whose only option is "no card", both sides, every time), so that no skipped question tells a bot about
+    its opponent's hand. Absent means true; the site's games against a bot say false.
+
+  A question whose every option has the same effect is not asked: the referee answers it (`for_you`, §8). Kept, as no
+  rule tells them apart: the options of unused dice showing the same face are offered for the first of them only, and
+  a single forced option is applied without a question. Without `official_rules` (an older referee, the conformance
+  games) a game is played as before.
+- **A game from a position** (the certification run): `new_game` says `"start":"position"`, `"suite_entry":"<id>"`
+  and carries `view` (your side's view of the start position, as in `decide`); there are no setup events. A
+  **scenario** also says `"scenario":"<tag>"` and `"played_for_you":N`: the referee plays the first N decisions itself
+  (both sides, reported as ordinary `choice` events), then your bot answers. The game ends with `game_over`
+  `"how":"SUITE_END"` once the entry's decisions are played.
 
 ## 10. Matches
 

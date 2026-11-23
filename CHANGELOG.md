@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2, 2026-11-23: the official rules and certified bots
+
+- **The official rules, no house rules** (§9): a referee that says `"official_rules": true` in `new_game` offers every
+  option the rulebook allows (`no_effect` marks those that change nothing) and asks every question it asks: the Leader
+  re-roll (`LEADER_REROLL`, §5), declining a "may draw" (`draw` with `skip`), Mighty Attack's Companion, the Guide
+  after a Hunt separation, every reveal path (`reveal`'s `strongholds`), the Voice of Saruman's Settlements when
+  Regulars are short (`voice_of_saruman`'s `regions`), and the passes on a hidden hand (`hidden_passes`).
+- **A question that changes nothing is answered by the referee**: a `choice` event with `for_you`, no `decide` (§8).
+- **The Lidless Eye's options** carry `die` and `face` (`count` kept, §5). Conformance game 202: three fingerprints
+  follow; every choice, the result and the final views are unchanged. The other six games are unchanged.
+- **Certified bots**: the sandbox's certification run, `?certify=base` (games against `greedy` and `random`, the
+  position suite's 594 entries on each side, 15 scenarios) and its verdict (README, "Certify your bot"). A game from a
+  position (`start`, `suite_entry`, `view`) and a scenario (`scenario`, `played_for_you`), §9. The suite and the
+  position notation (WPN) are in [`positions/`](positions/).
+
 ## 0.2, 2026-11-20: the sandbox
 
 The protocol is unchanged. A test referee for the site's bot testers, `wss://sandbox.wotr.behindmedia.com/referee`,

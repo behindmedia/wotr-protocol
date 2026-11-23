@@ -96,6 +96,47 @@ out for 15 minutes; a game ends after 2 hours. Errors come as `{"type":"error","
 `unauthorized`, `bad_request` (a parameter, or rules your hello does not declare), `busy`, `no_partner`, `rate_limited`
 or `unavailable`.
 
+## Certify your bot
+
+A **certified bot** plays by the official rules without fault: it answers every question with a listed option, in
+time, without crashing, in whole games and from the position suite's positions. Certification does not judge
+strength: a bot that loses every game still certifies.
+
+1. **Get a sandbox key** (bot testers: `https://wotr.behindmedia.com/referee/keys`).
+2. **Test as you go** with ordinary sandbox games: `?opponent=random&games=20&clock_ms=200` (the quickest check that
+   every decision kind is answered), then `opponent=greedy`, fixed `seed`s to replay a failure exactly, and the
+   protocol logs (`/logs/<game>`).
+3. **Run the certification**: connect to
+   `wss://sandbox.wotr.behindmedia.com/referee?certify=base` (or `certify=lome`, `certify=lome:council`, `certify=all`
+   for every ruleset your `hello` declares) with your key. Optional: `clock_ms` (200–60000, default 1000),
+   `stop_on_failure=1`. The run plays:
+   - 10 games against `greedy` and 10 against `random` on each side, for each ruleset (fixed seeds);
+   - every entry of the position suite (594 positions of the base game), your bot on each side in turn: the game
+     starts at the entry's position (`new_game` says `"start":"position"` and `"suite_entry"`, and carries `view`,
+     your side's view of the start position; there are no setup events) and ends at the entry's next quiet position
+     (`game_over` with `"how":"SUITE_END"`);
+   - the **scenarios**: 15 entries, each a question the official rules ask that bots got wrong (the Leader re-roll on
+     each side, declining the Sorcerer's and the Guide's draws, Mighty Attack's Companion, Many Kings' counts, The
+     Ringwraiths Are Abroad, The Black Captain Commands, Stormcrow, Gwaihir the Windlord, I Will Go Alone, a Hunt's
+     remainder as Corruption, a `no_effect` option, a question answered `for_you`, the Voice of Saruman's Settlements). The referee plays the entry's
+     first moves itself (`new_game` says `"scenario"` and `"played_for_you": N`; they come as ordinary `choice`
+     events, both sides), then your bot answers its side.
+4. **The verdict** comes as a last message, `{"type":"certification","passed":true,…}` with every failure (the game,
+   why: `illegal_option`, `timeout`, `connection`, …), and stays at `GET https://sandbox.wotr.behindmedia.com/certification`
+   with your key, with the protocol log of each failed game for 7 days. Fix, run again; a passed run is your
+   certificate: name it when you register the bot for tournaments or online play.
+
+What a bot must handle that a casual test may not show: `no_effect` options, the `skip` of an optional draw, reveal
+paths with `strongholds`, the Voice of Saruman's `regions`, `LEADER_REROLL`, Mighty Attack's Companion, the Guide asked again, the hidden passes, a
+`choice` made `for_you`, and a game that starts mid-way, some moves already played for you.
+
+A bot that answers from its own engine should also never fall back to a default answer: the certification only sees
+legal answers, so count your own fallbacks (our three adapters log each) and bring them to zero.
+
+**Engines of your own:** a bot that keeps its own copy of the game can check that copy too: the conformance games
+(`conformance/`) and the position suite ([`positions/`](positions/): the entries and the WPN position notation)
+replay every decision's options (fingerprints) and the positions reached.
+
 ## Play people on the site
 
 Your bot can play people on wotr.behindmedia.com, in their app, as any online game: they meet it in quick match (when
