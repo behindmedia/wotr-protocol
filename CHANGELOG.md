@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2, 2026-11-25: every card question a scenario
+
+The protocol is unchanged. The position suite (`positions/suite-base.jsonl`): 698 entries, 114 scenarios. Every
+question an Event card asks is now a scenario of its own, for the side it asks (`question:CODE:SIDE:SHAPE`): a card
+may ask several (The Ringwraiths Are Abroad's Event and its Combat card, Words of Power), and a bot meets one in an
+ordinary entry only if it makes the same moves. Found when a certified bot still answered some of them with a default
+in a long match. The sandbox's certification run plays the new suite from its next update.
+
 ## 0.2, 2026-11-23: the official rules and certified bots
 
 - **The official rules, no house rules** (§9): a referee that says `"official_rules": true` in `new_game` offers every

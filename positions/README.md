@@ -1,6 +1,6 @@
 # The position suite
 
-`suite-base.jsonl`: 594 positions of the base game, one JSON object a line, which the sandbox's certification run plays
+`suite-base.jsonl`: 698 positions of the base game, one JSON object a line, which the sandbox's certification run plays
 (README, "Certify your bot"): each from its position, your bot on each side in turn, up to the entry's next quiet
 position. A bot with an engine of its own can also replay them itself to check its copy of the rules.
 
@@ -13,8 +13,11 @@ position. A bot with an engine of its own can also replay them itself to check i
   `{"random": {…}}`, as the `random_*` events (§8).
 - `covers`: the tags the entry covers (cards offered and played, decision kinds, Hunt tiles, questions of the official
   rules).
-- `scenario` (15 entries): `tag`, `from` and `side`: the certification run plays the first `from` decisions itself,
-  then your bot answers that side's question (`new_game` says `scenario` and `played_for_you`).
+- `scenario` (114 entries): `tag`, `from` and `side`: the certification run plays the first `from` decisions itself,
+  then your bot answers that side's question (`new_game` says `scenario` and `played_for_you`). Every question a card
+  asks, for the side it asks, is one: its tag is `question:CODE:SIDE:SHAPE` (`question:SC23:sh:whose-leadership-and-abilities-are-cancelled`:
+  the question's words with names and numbers left out); an entry `…-qN` is a copy of the harvested entry `…` for one
+  of them.
 
 Every entry is played by the official rules (SPEC.md §9).
 

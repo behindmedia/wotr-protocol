@@ -111,14 +111,17 @@ strength: a bot that loses every game still certifies.
    for every ruleset your `hello` declares) with your key. Optional: `clock_ms` (200–60000, default 1000),
    `stop_on_failure=1`. The run plays:
    - 10 games against `greedy` and 10 against `random` on each side, for each ruleset (fixed seeds);
-   - every entry of the position suite (594 positions of the base game), your bot on each side in turn: the game
+   - every entry of the position suite (698 positions of the base game), your bot on each side in turn: the game
      starts at the entry's position (`new_game` says `"start":"position"` and `"suite_entry"`, and carries `view`,
      your side's view of the start position; there are no setup events) and ends at the entry's next quiet position
      (`game_over` with `"how":"SUITE_END"`);
-   - the **scenarios**: 15 entries, each a question the official rules ask that bots got wrong (the Leader re-roll on
+   - the **scenarios**: 114 entries, each a question your bot must answer itself: every question an Event card asks,
+     for the side it asks (99), and the official rules' questions that bots got wrong (the Leader re-roll on
      each side, declining the Sorcerer's and the Guide's draws, Mighty Attack's Companion, Many Kings' counts, The
      Ringwraiths Are Abroad, The Black Captain Commands, Stormcrow, Gwaihir the Windlord, I Will Go Alone, a Hunt's
-     remainder as Corruption, a `no_effect` option, a question answered `for_you`, the Voice of Saruman's Settlements). The referee plays the entry's
+     remainder as Corruption, a `no_effect` option, a question answered `for_you`, the Voice of Saruman's Settlements).
+     A bot that answers some question with a stand-in of its own (a default, the first option) still passes; your
+     bot's own log is where to look for those. The referee plays the entry's
      first moves itself (`new_game` says `"scenario"` and `"played_for_you": N`; they come as ordinary `choice`
      events, both sides), then your bot answers its side.
 4. **The verdict** comes as a last message, `{"type":"certification","passed":true,…}` with every failure (the game,
